@@ -699,9 +699,10 @@ function trainArcane() {
   if (loc === 'demacia') {
     add('magic', 1.15); add('mood', -1.4); add('mind', .35);
     g.flags.practicedArcane = 1;
-    if (!g.flags.magicHidden && chance(.32)) {
+    const heat = g.magic >= 80 ? .62 : g.magic >= 65 ? .46 : .3;
+    if (!g.flags.magicHidden && chance(heat)) {
       g.flags.magicOpen = 1; g.flags.mageMarked = 1;
-      emit(L('มีคนเห็นแสงเวทของคุณในเดมาเซีย นักล่าเวทเริ่มถามชื่อ', 'bad', '👁️'));
+      if (!g.queue.includes('dem_witness')) g.queue.push('dem_witness');
     } else if (chance(.14)) emit(L('คุณฝึกเวทอย่างลับ ๆ กำแพงเพทริไซต์ทำให้พลังอุ่นและเชื่องช้า', 'n', '🪨'));
     return;
   }
@@ -798,24 +799,25 @@ const CHIP_TIPS = {
   addicted: 'ร่างกายพึ่งสารเสพติด สุขภาพและอารมณ์ลดทุกปีจนกว่าจะหาทางเลิกได้',
   mageMarked: 'ชื่อคุณอยู่ในบัญชีนักล่าเวทของเดมาเซีย โอกาสถูกจับสูงขึ้น',
   magicSealed: 'เพทริไซต์ผนึกเวทไว้ การฝึกศาสตร์ลึกลับแทบไม่เพิ่มพลัง',
+  prison: 'คุณถูกคุมขังตามกฎหมายของเมือง งานหายไป สุขภาพลด และอาจไม่รอดจากห้องขัง',
   magicOpen: 'คุณใช้เวทอย่างเปิดเผย แคว้นที่กลัวเวทจะจับตาคุณ',
   solari: 'คุณเดินตามสุริยัน บนทาร์กอนชื่อเสียงและความเชื่อเพิ่มขึ้น',
   lunari: 'คุณเดินตามจันทรา ได้เวทมากขึ้น แต่บนทาร์กอนถูกกดขี่',
   mistDeep: 'คุณเอนเข้าหาหมอกดำ พลังเพิ่มและความตายใกล้ขึ้น',
 };
 const ARCANE_LAW = {
-  demacia: 'เดมาเซียห้ามเวท เพทริไซต์ทำให้การฝึกช้าและหดหู่ หากมีคนเห็นแสงเวท ชื่อคุณจะเข้ารายชื่อนักล่าเวท วาสทาญ่า ผู้ถูกหมอก และผู้ถูกความว่างถูกสังเกตแม้ไม่ได้ฝึก ยอร์เดิลอยู่ได้จนกว่าจะเริ่มใช้เวท',
-  noxus: 'น็อกซัสไม่ห้ามเวท ถ้าเวททำให้คุณมีประโยชน์ ทหารและวงลับอาจเรียกใช้ คุณได้ชื่อเสียงและรายได้จากงานเวทมากกว่าแคว้นที่กลัวมัน',
-  ionia: 'เวทวิญญาณเป็นส่วนของชีวิต วาสทาญ่าและลูกครึ่งที่อยู่บ้านเกิดจะได้รับการหล่อเลี้ยง ออกจากแผ่นดินที่จำเผ่าได้แล้วร่างกายจะอ่อนลง',
-  piltover: 'เวทที่นี่ไปทางเฮ็กซ์เท็ค ผู้มีสติปัญญาสูงได้เงินจากงานเล็ก ๆ ผู้ที่ยังไม่ชำนาญอาจถูกประกายไฟสาด',
-  zaun: 'เคมเทคเพิ่มพลังแลกกับสุขภาพ สารในเมืองอาจเปลี่ยนร่างกายทีละน้อย',
-  freljord: 'ทรูไอซ์ฟังเฉพาะไอซ์บอร์น คนอื่นที่ฝืนใช้จะถูกความหนาวกัด ไอซ์บอร์นในบ้านเกิดทนหนาวและฟื้นตัวดีกว่า',
-  bilgewater: 'ไม่มีกฎหมายเวทชัดเจน พลังใช้ได้ค่อนข้างอิสระ วาสทาญ่าเผ่ามารายนับทะเลนี้เป็นบ้าน',
-  shurima: 'เวทอาทิตย์ยังถูกนับถือ ผู้ถูกความว่างถูกกลัวและถูกขอให้อยู่ห่างชุมชน โทรลล์ทรายอยู่ได้ตามปกติในทะเลทราย',
-  ixtal: 'เวทธาตุเป็นศักดิ์ศรีของผู้เกิดที่นี่และของวาสทาญ่า คนนอกฝึกได้น้อยและเสียชื่อเสียง หากย้ายเข้ามาจะถูกถามว่ามาเรียนหรือมาบุกรุก',
-  targon: 'พลังที่สูงพออาจถูกสุริยันหรือจันทราเลือก โซลารีได้รับการยอมรับ ลูนารีถูกตามล่าแม้จะได้เวทมากขึ้น',
-  shadow: 'การฝึกดึงหมอกดำเข้ามา สุขภาพและอารมณ์ลดลง ผู้ถูกหมอกแตะและผู้ที่เปิดเวทแรง ๆ เสี่ยงถูกเรียกชื่อ',
-  bandle: 'ยอร์เดิลใช้เวทได้ตามธรรมชาติ คนอื่นเจอเวทที่เล่นกับความจริง ของรอบตัวอาจเปลี่ยนชั่วขณะและทำให้สับสน',
+  demacia: 'เดมาเซียห้ามเวท เพทริไซต์ทำให้การฝึกช้า หากมีคนเห็นแสงเวท คุณอาจถูกจดชื่อ ถูกขัง หรือสิ้นชีวิตในห้องขัง ยิ่งเวทสูง ยิ่งซ่อนยาก วาสทาญ่า ผู้ถูกหมอก และผู้ถูกความว่างถูกสังเกตแม้ไม่ได้ฝึก',
+  noxus: 'น็อกซัสไม่ห้ามเวท ถ้าเวททำให้คุณมีประโยชน์ แต่ใช้กำลังหรือเวทโดยไม่มีผู้บัญชาการ คือการท้าทายจักรวรรดิ โทษคือค่ายกักกันหรือการประหาร',
+  ionia: 'เวทวิญญาณเป็นส่วนของชีวิต การใช้พลังจนเสียสมดุลหรือแตะวิถีเงาอาจถูกคินคูกลักกัน วาสทาญ่าอยู่บ้านเกิดแล้วร่างกายได้รับการหล่อเลี้ยง',
+  piltover: 'เมืองไม่ได้ห้ามเวท แต่ห้ามใช้เฮ็กซ์เทคโดยไม่มีใบอนุญาต ผู้มีสติปัญญาสูงได้งานจากมัน คนไม่มีสถานะถูกปรับหรือถูกขัง',
+  zaun: 'เคมเทคเพิ่มพลังแลกกับสุขภาพ การปรุงหรือขายสารโดยไม่ได้รับอนุญาตจากผู้มีอำนาจในซอยจบที่หลุมขังหรือการระเบิด',
+  freljord: 'ทรูไอซ์เป็นของเผ่าและฟังเฉพาะไอซ์บอร์น คนนอกที่ฝืนใช้หรือลักผลึกถูกเผ่าพิพากษา ทั้งกักกันในความหนาวหรือทิ้งในพายุ',
+  bilgewater: 'ไม่มีศาลแผ่นดิน แต่กติกากัปตันมีจริง ทรยศลูกเรือ ขโมยส่วนแบ่ง หรือใช้เวทกล่นเรือ จบที่ท้องเรือหรือกลางทะเล',
+  shurima: 'เวทอาทิตย์ยังถูกนับถือ การเปิดสุสานต้องห้ามหรือพารอยความว่างเข้าตลาดทำให้ชุมชนขับไล่ กักกัน หรือกลบคุณไว้กับซาก',
+  ixtal: 'เวทธาตุเป็นศักดิ์ศรีของผู้เกิดที่นี่และของวาสทาญ่า คนนอกที่ฝึกเองถูกมองว่าบุกรุก และถูกกักหรือสังหารได้',
+  targon: 'โซลารีคือศรัทธาที่เมืองยอมรับ การประกอบพิธีจันทร์หรือเปิดพลังโดยไม่ได้อยู่ฝ่ายสุริยันนำไปสู่การกักกันหรือการประหาร',
+  shadow: 'หมอกดำไม่ใช่กฎหมายลายลักษณ์ แต่ผู้เฝ้าหมอกจับคนที่เรียกหมอกเข้าหมู่บ้าน คุณอาจถูกมัดไว้หรือถูกส่งให้หมอก',
+  bandle: 'ยอร์เดิลใช้เวทได้ตามธรรมชาติ คนนอกที่ดัดเวทของเมืองหรือฝ่าประตูแบนเดิลจะถูกขังสั้น ๆ หรือถูกดีดออกจากเมือง',
 };
 
 // ---------- focus ----------
@@ -952,6 +954,8 @@ function deathRoll() {
   if (g.loc === 'demacia' && g.age >= 16 && noticedInDemacia(g)) {
     mageHunt = g.flags.magicOpen ? .0024 : g.flags.magicHidden ? .00035 : .0011;
     if (g.flags.mageMarked) mageHunt *= 2;
+    if (g.magic >= 80) mageHunt += .0018;
+    if (g.flags.prison) mageHunt += .004;
     if (['vastaya', 'voidtouched', 'mist'].includes(g.raceId)) mageHunt += .0008;
   }
   for (const w of g.activeWorld) {
@@ -989,6 +993,37 @@ const QUIET = {
 };
 function quietLine() { const a = g.age; return pick(a < 13 ? QUIET.kid : a < 18 ? QUIET.teen : a < 62 ? QUIET.adult : QUIET.old); }
 
+function imprison(years, why) {
+  g.flags.prison = (g.flags.prison || 0) + years;
+  g.flags.prisonWhy = why;
+  g.flags.wasJailed = 1;
+  g.flags.jailedYears = (g.flags.jailedYears || 0) + years;
+  if (g.job) { g.job = null; g.rank = 0; g.jobYears = 0; }
+  g.focus = 'rest';
+  add('mood', -12);
+  add('rep', -8);
+}
+function prisonTick() {
+  g.focus = 'rest';
+  add('health', g.loc === 'demacia' ? -4.2 : -2.6);
+  add('mood', -3.2);
+  if (g.loc === 'demacia') { g.flags.magicSealed = 1; g.flags.magicOpen = 0; add('magic', -1.1); }
+  const dieP = .035 + (g.health < 28 ? .1 : 0) + (g.loc === 'demacia' && g.magic > 78 ? .045 : 0);
+  if (chance(dieP)) {
+    die(g.loc === 'demacia' ? 'สิ้นใจในห้องขังเพทริไซต์ของเดมาเซีย' : 'ไม่รอดจากการถูกคุมขัง');
+    return true;
+  }
+  g.flags.prison--;
+  if (g.flags.prison <= 0) {
+    g.flags.prison = 0;
+    const why = g.flags.prisonWhy ? ` หลัง${g.flags.prisonWhy}` : '';
+    emit(L(`คุณถูกปล่อยจากที่คุมขัง${why} ชื่อและงานเดิมไม่รอคุณอยู่`, 'major', '🚪'));
+  } else {
+    emit(L(`คุณยังถูกคุมขัง${g.flags.prisonWhy ? ' เพราะ' + g.flags.prisonWhy : ''} เหลืออีก ${g.flags.prison} ปี`, 'bad', '⛓️'));
+  }
+  return false;
+}
+
 function yearTick() {
   g.age++;
   g.workMul = 1;
@@ -1000,21 +1035,25 @@ function yearTick() {
   if (g.age > 65) add('mind', -(g.age - 65) * .04);
   add('mood', (55 - g.mood) * .08);
   add('health', [-.3, 0, .2, .4, .6][g.cls] + (R.medical - 5) * .15);
-  if (g.flags.addicted) { add('health', -2.5); add('mood', -2); g.gold -= 15; }
-  // focus
-  const f = FOCUS.find(x => x.id === g.focus);
-  if (f && g.age >= f.min) f.fx(g); else g.focus = g.age < 6 ? 'rest' : 'study';
+  if (g.flags.addicted && !g.flags.prison) { add('health', -2.5); add('mood', -2); g.gold -= 15; }
+  const jailed = g.flags.prison > 0;
+  if (jailed) {
+    if (prisonTick()) return;
+  } else {
+    const f = FOCUS.find(x => x.id === g.focus);
+    if (f && g.age >= f.min) f.fx(g); else g.focus = g.age < 6 ? 'rest' : 'study';
+  }
   if (!g.alive) return;
   raceClimate();
-  if (g.age < 12 && g.focus === 'study' && g.edu === 0) add('mind', -1); // no schooling
-  // economy
+  if (!jailed && g.age < 12 && g.focus === 'study' && g.edu === 0) add('mind', -1);
+  if (!jailed && g.age >= 16) {
+    if (g.magic >= 85 && !g.flags.surge85) { g.flags.surge85 = 1; g.queue.push('magic_crest'); }
+    else if (g.magic >= 70 && !g.flags.surge70) { g.flags.surge70 = 1; g.queue.push('magic_crest'); }
+  }
   economy(R);
-  // world
-  worldTick();
-  // family
+  if (!jailed) worldTick();
   familyTick();
-  // job progress
-  if (g.job) {
+  if (!jailed && g.job) {
     g.jobYears++;
     const perf = (g.mind + g.charm + g.body) / 300;
     if (g.rank < 5 && chance(.07 + perf * .1 + (g.focus === 'work' ? .05 : 0))) {
@@ -1025,15 +1064,19 @@ function yearTick() {
   // death
   if (g.age >= 100 && chance(.5)) { die('ร่างกายเสื่อมตามวัย'); return; }
   if (deathRoll()) return;
-  if (g.age >= 75 && g.job && !isRetired()) retire();
-  // schedule
-  schedule();
+  if (!jailed && g.age >= 75 && g.job && !isRetired()) retire();
+  if (!jailed) schedule();
   if (g.log.length === before && chance(.4)) emit(L(quietLine(), 'q', '·'));
-  if (g.auto) autoFocus();
+  if (!jailed && g.auto) autoFocus();
   UI.renderAll();
   pump();
 }
 function economy(R) {
+  if (g.flags.prison > 0) {
+    g.gold = Math.max(-300, Math.round(g.gold - 8));
+    add('mood', -1);
+    return;
+  }
   let inc = 0;
   if (g.job) {
     const c = CA[g.job];
@@ -1236,8 +1279,111 @@ def('dem_seek', { min: 10, max: 72, p: g => {
 }, make: g => ({ icon: '👁️', title: 'นักล่าเวทแห่งเดมาเซีย', text: `${g.race !== 'มนุษย์' ? 'ร่างของ' + g.race + 'ทำให้คุณถูกมองก่อนคนอื่น ' : ''}คณะนักล่าเวทตรวจตราเมืองด้วยเพทริไซต์ ผู้มีเวทในตัวถูกพาตัวไปกักกัน ไม่ใช่ถูกเชิญให้เรียน`, choices: [
   { t: 'ก้มหน้าและซ่อนเวท', d: 'อาจรอด แต่ความลับเปราะ', w: 3, run: () => { g.flags.magicHidden = 1; g.flags.magicOpen = 0; add('mood', -4); add('magic', -1); if (chance(.42)) { g.flags.mageMarked = 1; return L('คุณพยายามซ่อน แต่มีคนจดชื่อคุณไว้ หลังจากนี้ตาของพวกเขาจะตามมา', 'bad', '👁️'); } return L('คุณเดินผ่านชุดเกราะขาวไปได้ ความลับยังอยู่กับคุณ', 'n', '🤫'); } },
   { t: 'มอบตัวให้ผนึกด้วยเพทริไซต์', d: 'เวทอ่อนลง ชื่อเสียงฝ่ายกฎหมายดีขึ้น', run: () => { g.flags.magicSealed = 1; g.flags.magicOpen = 0; g.flags.magicHidden = 1; g.flags.mageMarked = 1; add('magic', -18); add('mood', -12); add('rep', 5); g.gold -= 15; return L('เพทริไซต์ถูกผูกไว้กับคุณ เวทมอดลงเหมือนไฟที่ถูกหินกลบ และคุณถูกจับตาไปอีกนาน', 'bad', '🪨'); } },
-  { t: 'สู้แล้วหนีออกจากเดมาเซีย', d: 'ทิ้งบ้าน เสี่ยงบาดเจ็บ', run: () => { if (chance(.3 + g.body / 400)) { const id = g.raceId === 'yordle' ? 'bandle' : g.raceId === 'vastaya' || g.raceId === 'half' ? 'ionia' : g.raceId === 'iceborn' ? 'freljord' : 'piltover'; moveTo(id); return null; } add('health', -16); g.gold -= 30; g.flags.mageMarked = 1; return L('คุณหนีไม่พ้นในครั้งนี้ ถูกทำร้ายและชื่อคุณอยู่ในบัญชีผู้ใช้เวท', 'bad', '⛓️'); } },
+  { t: 'สู้แล้วหนีออกจากเดมาเซีย', d: 'ทิ้งบ้าน เสี่ยงบาดเจ็บหรือถูกจับ', run: () => { if (chance(.3 + g.body / 400)) { const id = g.raceId === 'yordle' ? 'bandle' : g.raceId === 'vastaya' || g.raceId === 'half' ? 'ionia' : g.raceId === 'iceborn' ? 'freljord' : 'piltover'; moveTo(id); return null; } if (chance(.35)) { imprison(ri(3, 5), 'หนีนักล่าเวทไม่พ้น'); return L('คุณถูกจับระหว่างหนี และถูกขังในห้องเพทริไซต์', 'bad', '⛓️'); } add('health', -16); g.gold -= 30; g.flags.mageMarked = 1; return L('คุณหนีไม่พ้นในครั้งนี้ ถูกทำร้ายและชื่อคุณอยู่ในบัญชีผู้ใช้เวท', 'bad', '⛓️'); } },
 ] }) });
+def('dem_witness', { min: 12, max: 80, p: g => {
+  if (g.loc !== 'demacia' || g.flags.prison || g.flags.magicSealed) return 0;
+  if (!(g.flags.magicOpen || g.flags.practicedArcane || g.magic >= 70)) return 0;
+  return clamp((g.focus === 'arcane' ? .14 : .045) + Math.max(0, g.magic - 58) / 420, 0, .34);
+}, when: g => g.loc === 'demacia' && !g.flags.prison && g.flags.witnessAge !== g.age, make: () => {
+  g.flags.witnessAge = g.age;
+  const bright = g.magic >= 78;
+  return { icon: '👁️', title: 'มีคนเห็นคุณใช้เวท', text: bright
+    ? 'แสงเวทของคุณสว่างจนเพทริไซต์บนกำแพงตอบสนอง เพื่อนบ้านร้องเรียกนักล่าเวทต่อหน้าคุณ'
+    : 'มีคนเห็นประกายเวทจากมือคุณในเดมาเซีย เขาไม่ได้กรีดร้อง แต่เขากำลังเดินไปหาชุดเกราะขาว', choices: [
+    { t: 'ยอมถูกจับ', d: 'ถูกคุมขังหลายปี และเวทถูกกด', w: 2, run: () => { imprison(bright ? ri(3, 6) : ri(2, 4), 'มีคนเห็นคุณใช้เวทในเดมาเซีย'); g.flags.mageMarked = 1; g.flags.magicSealed = 1; g.flags.magicOpen = 0; return L('คุณถูกพาเข้าห้องขังเพทริไซต์ งานและชื่อเสียงข้างนอกหยุดลงตั้งแต่วันนั้น', 'major', '⛓️'); } },
+    { t: 'วิ่งออกจากเมือง', d: 'ถ้าพลาดจะถูกขังนานกว่า', run: () => { if (chance(.32 + g.body / 320)) { moveTo('piltover'); return null; } imprison(ri(4, 7), 'พยายามหนีหลังถูกเห็นใช้เวท'); add('health', -10); g.flags.mageMarked = 1; return L('คุณวิ่งไม่พ้นประตูเมือง และถูกขังนานขึ้นเพราะขัดขืน', 'bad', '⛓️'); } },
+    { t: 'ใช้เวทสู้กับผู้ที่มาจับ', d: 'อาจจบชีวิตที่นี่', run: () => { const dieP = clamp(.42 - g.magic / 280, .12, .5); if (chance(dieP)) { die('ถูกนักล่าเวทสังหารหลังใช้เวทต่อหน้าสาธารณะในเดมาเซีย'); return null; } if (g.magic >= 76 && chance(.55)) { add('rep', -18); add('health', -12); moveTo('piltover'); return null; } imprison(ri(5, 8), 'ใช้เวทต่อสู้กับนักล่าเวท'); add('health', -14); g.flags.mageMarked = 1; g.flags.magicSealed = 1; return L('คุณสู้ไม่ขาด ถูกมัดด้วยเพทริไซต์และทิ้งไว้ในห้องขัง', 'bad', '⛓️'); } },
+  ] };
+} });
+def('magic_crest', { p: 0, when: g => !g.flags.prison && g.magic >= 70, make: () => {
+  const high = g.magic >= 85;
+  const dem = g.loc === 'demacia';
+  const ixt = g.loc === 'ixtal' && g.born !== 'ixtal' && g.raceId !== 'vastaya';
+  const tar = g.loc === 'targon' && g.flags.aspect === 'lunari';
+  const outlaw = dem || ixt || tar;
+  const text = dem
+    ? `พลังเวทของคุณ${high ? 'ล้นจนหินเพทริไซต์ในเมืองสั่น' : 'สว่างพอที่เพื่อนบ้านจะชี้ได้'} กฎหมายเดมาเซียมองนี่เป็นความผิด`
+    : ixt
+      ? `เวทธาตุของคุณดังพอที่สำนักอิกซ์ทัลจะได้ยิน คนนอกที่ใช้ธาตุโดยไม่ได้รับอนุญาตถูกจับ ไม่ถูกเชิญให้เรียน`
+      : tar
+        ? `พลังจันทราของคุณโผล่พ้นการซ่อน โซลารีบนทาร์กอนมีสิทธิ์ลากคุณไปกักกัน`
+        : `พลังเวทของคุณข้ามเส้นที่ซ่อนได้อีกต่อไป สถานะของคุณใน${RG[g.loc].name}เปลี่ยนตามสายตาของผู้คน`;
+  const choices = outlaw ? [
+    { t: 'มอบตัว', d: 'ถูกคุมขัง เวทถูกกด', w: 2, run: () => { imprison(high ? ri(3, 6) : ri(1, 3), dem ? 'พลังเวทเกินกว่าที่เดมาเซียยอม' : ixt ? 'ใช้เวทธาตุโดยไม่ได้รับอนุญาต' : 'เปิดเผยตนเป็นลูนารี'); if (dem) { g.flags.magicSealed = 1; g.flags.mageMarked = 1; } return L('คุณถูกคุมขัง ชีวิตการงานหยุด และพลังถูกกดไว้ระหว่างโทษ', 'major', '⛓️'); } },
+    { t: 'หนีออกจากแคว้น', run: () => { if (chance(.4 + g.body / 400)) { moveTo(g.raceId === 'vastaya' || g.raceId === 'half' ? 'ionia' : 'bilgewater'); return null; } imprison(ri(3, 5), 'หนีไม่พ้นหลังพลังเวทโผล่'); add('health', -8); return L('การหนีพังตั้งแต่ประตูแรก คุณถูกขังแทน', 'bad', '⛓️'); } },
+    { t: 'ปล่อยพลังใส่ผู้ที่มาจับ', d: 'เสี่ยงจบชีวิต', run: () => { if (chance(high ? .22 : .4)) { die(dem ? 'ถูกประหารเพราะใช้เวทสู้เจ้าหน้าที่เดมาเซีย' : 'สิ้นชีวิตระหว่างขัดขืนกฎของเมือง'); return null; } add('rep', -14); add('health', -10); add('magic', 3); return L('คุณรอดมาได้ แต่ทั้งเมืองจำคุณในฐานะภัย ไม่ใช่พลเมือง', 'bad', '💥'); } },
+  ] : [
+    { t: 'ยอมให้พลังเป็นที่รู้กัน', w: 2, run: () => { g.flags.magicOpen = 1; add('rep', g.loc === 'noxus' ? 6 : -3); add('mood', g.loc === 'noxus' ? 3 : -2); return L(g.loc === 'noxus' ? 'น็อกซัสจดคุณเป็นอาวุธที่มีประโยชน์ ชื่อเสียงขึ้นพร้อมกับความเป็นหนี้ต่ออำนาจ' : 'ผู้คนรู้แล้วว่าคุณใช้เวท สถานะของคุณไม่ธรรมดาอีกต่อไป', 'major', '✨'); } },
+    { t: 'กดพลังลงจนเจ็บ', run: () => { add('magic', -8); add('health', -6); add('mood', -4); g.flags.magicHidden = 1; g.flags.magicOpen = 0; return L('คุณฝืนปิดพลัง สุขภาพและเวทลดลง แต่สายตายังไม่กลายเป็นคดี', 'n', '🤫'); } },
+    { t: 'ออกจากเมืองก่อนเรื่องบาน', run: () => { moveTo(g.loc === 'zaun' ? 'piltover' : 'ionia'); return null; } },
+  ];
+  return { icon: high ? '🌟' : '✨', title: high ? 'พลังเวทล้นตัว' : 'พลังเวทเป็นที่สังเกต', text, choices };
+} });
+def('pil_license', { min: 18, max: 70, p: g => (g.loc === 'piltover' && !g.flags.prison && g.magic >= 68 && g.edu < 3) ? .08 : 0, make: () => ({ icon: '⚖️', title: 'เฮ็กซ์เทคที่ไม่มีใบอนุญาต', text: 'เจ้าหน้าที่พิลโทเวอร์ตรวจพบว่าคุณใช้พลังในงานที่ไม่มีใบอนุญาต เมืองนี้ไม่ได้ห้ามเวท แต่ห้ามคนที่ไม่มีสถานะมาแตะเฮ็กซ์เทค', choices: [
+  { t: 'จ่ายค่าปรับ', d: 'ต้องมีทองอย่างน้อย 80', dis: g.gold < 80 && 'ทองไม่พอ', w: 2, run: () => { g.gold -= 90; add('rep', -2); return L('คุณจ่ายค่าปรับและถูกบันทึกชื่อ งานเวทหลังจากนี้ต้องทำให้ถูกกฎ', 'n', '🪙'); } },
+  { t: 'ยอมถูกขังระยะสั้น', run: () => { imprison(1, 'ใช้เฮ็กซ์เทคโดยไม่มีใบอนุญาต'); return L('คุณถูกคุมขังหนึ่งปี งานหายไปพร้อมกับปีนั้น', 'bad', '⛓️'); } },
+  { t: 'เลิกแตะต้องเฮ็กซ์เทค', run: () => { add('magic', -6); g.flags.magicHidden = 1; add('mood', -3); return L('คุณวางเครื่องมือลง พลังที่ฝึกมาบางส่วนเลือนไปกับสถานะที่กลับมาเป็นคนธรรมดา', 'n', '🔧'); } },
+] }) });
+def('ixt_forbid', { min: 16, max: 65, p: g => (g.loc === 'ixtal' && g.born !== 'ixtal' && g.raceId !== 'vastaya' && !g.flags.prison && g.focus === 'arcane' && g.magic >= 60) ? .12 : 0, make: () => ({ icon: '🌿', title: 'เวทธาตุที่ไม่มีสิทธิ์', text: 'ผู้พิทักษ์ป่าจับได้ว่าคุณฝึกเวทธาตุทั้งที่อิกซ์ทัลไม่ได้เปิดสำนักให้คนนอก นี่ไม่ใช่ความอยากรู้ มันคือการล่วงกฎหมายของป่า', choices: [
+  { t: 'ยอมถูกกักกัน', w: 2, run: () => { imprison(ri(2, 4), 'ฝึกเวทธาตุโดยไม่ได้รับอนุญาตในอิกซ์ทัล'); add('magic', -4); return L('คุณถูกกักที่ชายป่าหลายปี เวทที่แอบฝึกถูกสั่งให้หยุด', 'bad', '⛓️'); } },
+  { t: 'ออกจากอิกซ์ทัลทันที', run: () => { moveTo('piltover'); return null; } },
+  { t: 'ฝืนใช้ธาตุหนี', d: 'อาจไม่รอด', run: () => { if (chance(.3)) { die('ถูกผู้พิทักษ์ป่าแห่งอิกซ์ทัลสังหารเพราะฝืนกฎเวทธาตุ'); return null; } add('health', -12); moveTo('ionia'); return null; } },
+] }) });
+function cityLawOpen(ch) { return ch.loc && !ch.flags.prison && ch.flags.cityLawAge !== ch.age; }
+function markCityLaw() { g.flags.cityLawAge = g.age; }
+def('nox_law', { min: 16, max: 62, p: g => (cityLawOpen(g) && g.loc === 'noxus' && (g.rep < 26 || (g.job && CA[g.job].tag === 'crime') || (g.flags.magicOpen && g.magic >= 58))) ? .07 : 0, make: () => { markCityLaw(); return { icon: '⚔️', title: 'คำสั่งที่คุณขัด', text: 'น็อกซัสไม่ได้ห้ามเวท แต่ห้ามใช้กำลังนอกคำสั่ง ผู้บัญชาการบอกว่าสิ่งที่คุณทำคือความอ่อนแอต่อหน้าจักรวรรดิ', choices: [
+  { t: 'รับโทษในค่ายกักกัน', w: 2, run: () => { imprison(ri(2, 4), 'ขัดคำสั่งของน็อกซัส'); add('body', 1); return L('คุณถูกส่งเข้าค่ายกักกัน งานเดิมสิ้นสุด และชื่อของคุณถูกจดว่าเคยอ่อนข้อ', 'bad', '⛓️'); } },
+  { t: 'หนีลงเรือออกจากจักรวรรดิ', run: () => { if (chance(.4 + g.body / 400)) { moveTo('bilgewater'); return null; } imprison(ri(3, 5), 'หนีทัพน็อกซัส'); add('health', -8); return L('คุณถูกจับก่อนถึงท่า และโทษหนีทัพยาวกว่าโทษเดิม', 'bad', '⛓️'); } },
+  { t: 'ชักอาวุธใส่ผู้บัญชาการ', d: 'อาจถูกประหาร', run: () => { if (chance(.32)) { die('ถูกประหารเพราะขัดคำสั่งต่อหน้าผู้บัญชาการน็อกซัส'); return null; } add('rep', -10); add('health', -12); return L('คุณรอดจากดาบ แต่จักรวรรดิจะไม่ลืมหน้าคุณ', 'bad', '🩸'); } },
+] }; } });
+def('ion_balance', { min: 16, max: 70, p: g => (cityLawOpen(g) && g.loc === 'ionia' && (g.flags.shadow || (g.focus === 'arcane' && g.magic >= 64))) ? .07 : 0, make: () => { markCityLaw(); return { icon: '☯️', title: 'สมดุลที่คุณทำให้เอียง', text: 'วัดและคินคูถือว่าเวทที่ดึงโลกวิญญาณจนชาวบ้านเจ็บ ไม่ใช่การฝึก มันคือการละเมิดกติกาของไอโอเนีย', choices: [
+  { t: 'ยอมถูกกักที่วัด', w: 2, run: () => { imprison(ri(1, 3), 'ทำให้สมดุลของไอโอเนียเสีย'); add('magic', -3); add('mind', 1); return L('คุณถูกกักให้ชดใช้ที่วัด งานหยุด และเวทถูกสั่งให้เบาลง', 'bad', '⛓️'); } },
+  { t: 'เดินออกจากหมู่บ้าน', run: () => { if (chance(.55)) { moveTo('piltover'); return null; } add('mood', -4); return L('ทางออกถูกเฝ้า คุณยังอยู่ แต่ชื่อคุณในหมู่บ้านเสียไปแล้ว', 'n', '🚪'); } },
+  { t: 'ดึงพลังต่อหน้าพวกเขา', d: 'วิญญาณอาจไม่ปล่อย', run: () => { if (chance(.24)) { die('ถูกลากเข้าสู่โลกวิญญาณหลังฝืนกติกาแห่งสมดุล'); return null; } add('magic', 4); add('health', -10); add('rep', -6); return L('คุณรอดออกมาได้ แต่ร่างกายกับชื่อเสียงในไอโอเนียไม่ครบ', 'bad', '🌀'); } },
+] }; } });
+def('zau_chem', { min: 15, max: 60, p: g => (cityLawOpen(g) && g.loc === 'zaun' && (g.flags.addicted || g.focus === 'arcane' || g.magic >= 60)) ? .09 : 0, make: () => { markCityLaw(); return { icon: '🧪', title: 'สารที่ไม่มีเจ้าของซอยอนุญาต', text: 'ในซอนกฎหมายไม่ได้อยู่ที่ศาล แต่อยู่ที่คนคุมท่อ คุณปรุงหรือพกสารที่ผู้มีอำนาจในซอยไม่ได้สั่ง', choices: [
+  { t: 'ยอมลงหลุมขัง', w: 2, run: () => { imprison(ri(1, 3), 'ปรุงเคมเทคโดยไม่ได้รับอนุญาต'); add('health', -8); return L('คุณถูกขังในหลุมใต้โรงงาน อากาศเป็นพิษและงานของคุณหายไป', 'bad', '⛓️'); } },
+  { t: 'ปีนขึ้นพิลโทเวอร์', run: () => { if (chance(.36 + g.body / 500)) { moveTo('piltover'); return null; } imprison(2, 'ถูกจับขณะลักลอบขึ้นเมืองบน'); add('health', -6); return L('เจ้าหน้าที่เมืองบนจับคุณที่ลิฟต์ และส่งกลับลงไปขัง', 'bad', '⛓️'); } },
+  { t: 'เทสารใส่คนที่มาจับ', d: 'อาจระเบิดใส่ตัวเอง', run: () => { if (chance(.28)) { die('สิ้นชีวิตในระเบิดเคมเทคขณะขัดขืนผู้คุมซอย'); return null; } add('health', -14); add('rep', -8); add('magic', 2); return L('คุณรอดจากควัน แต่ปอดและชื่อในซอนพังไปพร้อมกัน', 'bad', '💥'); } },
+] }; } });
+def('fre_law', { min: 14, max: 65, p: g => (cityLawOpen(g) && g.loc === 'freljord' && g.raceId !== 'iceborn' && (g.focus === 'arcane' || g.magic >= 64)) ? .08 : 0, make: () => { markCityLaw(); return { icon: '❄️', title: 'ทรูไอซ์ที่ไม่ใช่ของคุณ', text: 'เผ่าในเฟรย์ลยอร์ดจับได้ว่าคุณแตะทรูไอซ์ทั้งที่เลือดคุณไม่ใช่ไอซ์บอร์น ของสิ่งนี้ไม่ใช่สมบัติสาธารณะ', choices: [
+  { t: 'ยอมให้เผ่ากักกัน', w: 2, run: () => { imprison(ri(2, 4), 'ล่วงทรูไอซ์ของเผ่า'); add('health', -6); return L('คุณถูกกักในค่ายท่ามกลางความหนาว งานไม่มี และร่างกายสู้ฤดูหนาวได้แย่ลง', 'bad', '⛓️'); } },
+  { t: 'หนีลงใต้', run: () => { if (chance(.42 + g.body / 400)) { moveTo('demacia'); return null; } imprison(ri(3, 5), 'หนีการพิพากษาของเผ่า'); add('health', -10); return L('พายุตัดทางหนี คุณถูกพากลับไปกักกันนานขึ้น', 'bad', '⛓️'); } },
+  { t: 'แย่งผลึกแล้วสู้', d: 'พายุอาจกลืนคุณ', run: () => { if (chance(.34)) { die('ถูกทิ้งในพายุเพราะล่วงทรูไอซ์ของเผ่า'); return null; } add('magic', 3); add('health', -16); return L('คุณรอดจากน้ำแข็งมาได้แต่นิ้วกับชื่อในเผ่าไม่รอด', 'bad', '❄️'); } },
+] }; } });
+def('bil_code', { min: 16, max: 68, p: g => (cityLawOpen(g) && g.loc === 'bilgewater' && ((g.job && CA[g.job].tag === 'crime') || g.rep < 24 || (g.flags.magicOpen && g.magic >= 60))) ? .08 : 0, make: () => { markCityLaw(); return { icon: '⚓', title: 'กติกากัปตัน', text: 'บิลจ์วอเทอร์ไม่มีศาลหลวง แต่เรือมีกติกา คุณถูกกล่าวว่าทรยศส่วนแบ่ง ขโมยของในระวาง หรือใช้เวทกล่นลูกเรือ', choices: [
+  { t: 'ยอมถูกขังท้องเรือ', w: 2, run: () => { imprison(ri(1, 3), 'ผิดกติกากัปตันที่บิลจ์วอเทอร์'); g.gold = Math.max(-300, g.gold - 40); return L('คุณถูกขังท้องเรือ ทองส่วนแบ่งถูกยึด และงานบนดาดฟ้าจบลง', 'bad', '⛓️'); } },
+  { t: 'กระโดดเรือไปเมืองอื่น', run: () => { if (chance(.38 + g.body / 450)) { moveTo('ionia'); return null; } imprison(ri(2, 4), 'หนีกติกากัปตันไม่พ้น'); add('health', -9); return L('คลื่นเหวี่ยงคุณกลับขึ้นเรือ โทษหนีเรือหนักกว่าเดิม', 'bad', '⛓️'); } },
+  { t: 'ชักมีดบนดาดฟ้า', d: 'อาจถูกทิ้งทะเล', run: () => { if (chance(.3)) { die('ถูกทิ้งทะเลตามกติกากัปตันแห่งบิลจ์วอเทอร์'); return null; } add('rep', -8); add('health', -11); return L('คุณชนะการชักมีดครั้งนี้ แต่ทุกท่าเรือจะจำชื่อคุณ', 'bad', '🗡️'); } },
+] }; } });
+def('shu_relic', { min: 16, max: 70, p: g => {
+  if (!cityLawOpen(g) || g.loc !== 'shurima') return 0;
+  if (g.raceId === 'voidtouched') return .1;
+  return (g.focus === 'arcane' && g.magic >= 60) ? .07 : 0;
+}, make: () => { markCityLaw(); return { icon: '☀️', title: 'สุสานที่ห้ามเปิด', text: 'ชุมชนชูริม่าจับได้ว่าคุณเปิดห้องต้องห้าม หรือพาสิ่งที่คล้ายรอยความว่างเข้าใกล้ตลาดน้ำ นี่ไม่ใช่การสำรวจ มันคือการลบแหล่งน้ำของคนทั้งโอเอซิส', choices: [
+  { t: 'ยอมถูกกักนอกโอเอซิส', w: 2, run: () => { imprison(ri(2, 4), 'เปิดสุสานต้องห้ามในชูริม่า'); add('rep', -4); return L('คุณถูกกักนอกแหล่งน้ำ งานค้าหยุด และผู้คนไม่ขายของให้เต็มราคา', 'bad', '⛓️'); } },
+  { t: 'เดินออกจากทะเลทราย', run: () => { if (chance(.45)) { moveTo('piltover'); return null; } add('health', -8); return L('คาราวานไม่รับคุณ คุณยังติดอยู่ในชูริม่าด้วยร่างกายที่แย่ลง', 'bad', '🏜️'); } },
+  { t: 'ฝืนเปิดห้องต่อ', d: 'ซากอาจกลบคุณ', run: () => { if (chance(g.raceId === 'voidtouched' ? .32 : .2)) { die('ถูกกลบในซากโบราณเพราะเปิดสิ่งต้องห้ามของชูริม่า'); return null; } add('magic', 5); add('health', -12); add('rep', -8); return L('คุณได้อะไรบางอย่างจากห้องนั้น และเสียที่อยู่ในการไปพร้อมกัน', 'bad', '🌀'); } },
+] }; } });
+def('tar_heresy', { min: 16, max: 70, p: g => {
+  if (!cityLawOpen(g) || g.loc !== 'targon' || g.flags.aspect === 'solari' || g.magic < 60) return 0;
+  return g.flags.aspect === 'lunari' ? .14 : .07;
+}, make: () => { markCityLaw(); const moon = g.flags.aspect === 'lunari'; return { icon: '☀️', title: 'ศาลของโซลารี', text: moon ? 'พิธีจันทร์ของคุณถูกโซลารีเห็น บนทาร์กอนนี่คือความผิดที่เมืองลงโทษได้ถึงชีวิต' : 'คุณใช้พลังบนเขาโดยไม่ได้อยู่ในศรัทธาโซลารี ผู้คุมวิหารถือว่านั่นคือการลบหลู่สุริยัน', choices: [
+  { t: 'ยอมถูกกักในวิหาร', w: 2, run: () => { imprison(moon ? ri(3, 5) : ri(1, 3), moon ? 'เป็นลูนารีบนทาร์กอน' : 'ใช้เวทนอกศรัทธาโซลารี'); add('rep', -5); return L('คุณถูกกักในวิหารสุริยัน งานบนเขาจบ และแสงที่นั่นไม่ได้อบอุ่น', 'bad', '⛓️'); } },
+  { t: 'ลงเขาไปให้พ้นวิหาร', run: () => { if (chance(.4 + g.body / 500)) { moveTo('ionia'); return null; } imprison(ri(2, 4), 'หนีศาลโซลารีไม่พ้น'); add('health', -8); return L('ทางลงเขาถูกปิด คุณถูกพากลับไปกักกัน', 'bad', '⛓️'); } },
+  { t: 'สู้กับผู้คุมวิหาร', d: 'โซลารีประหารผู้ไม่ยอม', run: () => { if (chance(moon ? .36 : .24)) { die('ถูกโซลารีประหารเพราะฝ่าฝืนศรัทธาแห่งสุริยัน'); return null; } add('magic', 3); add('health', -12); add('rep', -10); return L('คุณรอดจากวิหาร แต่ทั้งภูเขาจำคุณว่าเป็นศัตรูของแสง', 'bad', '🌙'); } },
+] }; } });
+def('sha_warden', { min: 14, max: 72, p: g => (cityLawOpen(g) && g.loc === 'shadow' && (g.flags.mistDeep || (g.flags.magicOpen && g.magic >= 60) || g.raceId === 'mist' && g.magic >= 55)) ? .08 : 0, make: () => { markCityLaw(); return { icon: '🌫️', title: 'ผู้เฝ้าหมอก', text: 'คนเฝ้าหมู่บ้านจับได้ว่าคุณเรียกหรือเข้าใกล้หมอกดำเกินไป กฎของที่นี่มีแค่ข้อเดียว อย่านำหมอกเข้าบ้าน', choices: [
+  { t: 'ยอมถูกมัดไว้นอกหมอก', w: 2, run: () => { imprison(ri(1, 3), 'เรียกหมอกดำเข้าใกล้หมู่บ้าน'); add('magic', -2); return L('คุณถูกมัดไว้ในกระท่อมเฝ้ายาม งานไม่มี และหมอกยังมองเห็นคุณ', 'bad', '⛓️'); } },
+  { t: 'ออกจากเกาะ', run: () => { if (chance(.35)) { moveTo('bilgewater'); return null; } add('health', -8); return L('เรือออกไม่ทัน หมอกทำให้คุณป่วยก่อนจะได้ลงเรือ', 'bad', '🌫️'); } },
+  { t: 'เดินเข้าหาหมอก', d: 'มันอาจรับคุณไปเลย', run: () => { if (chance(.26)) { die('ถูกหมอกดำพรากไปหลังฝ่าคำสั่งผู้เฝ้าหมอก'); return null; } g.flags.mistDeep = 1; add('magic', 6); add('health', -10); return L('คุณรอดจากหมอกมาได้รอบนี้ แต่มันจำข้อเสนอของคุณ', 'bad', '👁️'); } },
+] }; } });
+def('ban_rule', { min: 10, max: 80, p: g => (cityLawOpen(g) && g.loc === 'bandle' && g.raceId !== 'yordle' && (g.focus === 'arcane' || g.magic >= 50)) ? .1 : 0, make: () => { markCityLaw(); return { icon: '🌀', title: 'ประตูแบนเดิลไม่เปิดให้คนนอกทำตามใจ', text: 'ยอร์เดิลในเมืองบอกว่าคุณดัดเวทของแบนเดิลซิตี้ หรือพยายามฝ่าประตูที่ไม่ได้เชิญคุณ เมืองนี้ลงโทษด้วยการขังเล่น ๆ หรือดีดคุณออกไป', choices: [
+  { t: 'ยอมถูกขังในบ้านต้นไม้', w: 2, run: () => { imprison(ri(1, 2), 'ฝ่ากติกาประตูแบนเดิล'); add('mood', -4); return L('คุณถูกขังในบ้านต้นไม้ช่วงสั้น ๆ ของเล่นมีดและงานของคุณหายไประหว่างนั้น', 'bad', '⛓️'); } },
+  { t: 'เดินออกตามประตูที่เขาระบุ', run: () => { moveTo(chance(.5) ? 'piltover' : 'ionia'); return null; } },
+  { t: 'ฝ่าประตูเอง', d: 'เมืองอาจปิดทับ', run: () => { if (chance(.16)) { die('ประตูแบนเดิลปิดทับคุณขณะฝืนกติกาของเมือง'); return null; } add('magic', -4); add('health', -8); moveTo('piltover'); return null; } },
+] }; } });
 def('demacia_gate', { p: 0, when: g => g.loc === 'demacia' && noticedInDemacia(g), make: g => ({ icon: '🦁', title: 'ประตูเมืองที่กลัวเวท', text: `คุณเพิ่งเข้าสู่เดมาเซีย ${noticedInDemacia(g) ? 'สิ่งที่คุณเป็นหรือสิ่งที่คุณฝึกถูกอ่านว่าเป็นเวท' : ''} กฎหมายที่นี่ไม่ถามว่าคุณมาจากแคว้นไหน`, choices: [
   { t: 'ปิดบังและใช้ชีวิตให้เงียบ', w: 2, run: () => { g.flags.magicHidden = 1; g.flags.magicOpen = 0; add('mood', -5); return L('คุณเรียนที่จะไม่ใช้พลังต่อหน้ากำแพงหินขาว', 'n', '🤫'); } },
   { t: 'ยอมรับการเฝ้าดูของนักล่าเวท', run: () => { g.flags.mageMarked = 1; g.flags.magicHidden = 1; add('rep', -4); add('mood', -6); return L('คุณถูกบันทึกชื่อตั้งแต่ประตูเมือง ทุกการเดินทางหลังจากนี้มีคนตามดู', 'bad', '👁️'); } },
@@ -1854,6 +2000,8 @@ function titles() {
   if (g.places.length >= 3) t.push('นักเดินทางผู้ผ่านหลายแคว้น'); if (g.deathAge >= 90) t.push('อายุยืนยาวเกินร้อยละเก้าสิบ');
   if (g.flags.veteran) t.push('ผู้ผ่านสงคราม'); if (g.magic >= 75 && g.flags.magicOpen) t.push('ผู้ใช้เวทผู้ทรงพลัง');
   if (g.flags.mageMarked) t.push('ชื่อในบัญชีนักล่าเวท');
+  if (g.flags.prison) t.push('จบชีวิตในที่คุมขัง');
+  else if (g.flags.wasJailed) t.push('ผู้พ้นจากห้องขัง');
   if (g.flags.aspect === 'solari') t.push('ผู้เดินตามสุริยัน'); if (g.flags.aspect === 'lunari') t.push('ผู้เดินตามจันทรา');
   if (g.flags.vastayaRebel) t.push('ผู้ยืนข้างวาสทาญ่า');
   if (g.flags.voidResist) t.push('ผู้ปิดหูจากความว่าง');
@@ -1876,6 +2024,7 @@ function story() {
   if (g.flags.vastayaRebel) p.push('เคยยืนข้างเครือข่ายวาสทาญ่า');
   if (g.flags.voidResist) p.push('ต่อต้านเสียงจากรอยแยกของความว่าง');
   if (g.flags.trollExile) p.push('ถูกขับหรือเลือกออกจากเมืองมนุษย์เพราะร่างโทรลล์');
+  if (g.flags.wasJailed) p.push(`เคยถูกคุมขังรวม ${g.flags.jailedYears || 1} ปี`);
   if (g.met && g.met.length) p.push(`ได้พบกับ ${g.met.slice(0, 4).join(', ')}${g.met.length > 4 ? ' และอีก ' + (g.met.length - 4) + ' คน' : ''}`);
   if (g.legacy) p.push(g.legacy);
   p.push(`จากไปด้วย${g.deathCause}เมื่ออายุ ${g.deathAge} ปี`);
@@ -2197,7 +2346,7 @@ const UI = (() => {
     const job = g.job ? `${CA[g.job].name} · ${RANK[g.rank]}` : isRetired() ? 'เกษียณแล้ว' : g.age < 15 ? 'วัยเรียน' : 'ไม่มีงานประจำ';
     const tip = (key, label, extra) => `<span class="chip" title="${esc(CHIP_TIPS[key] || '')}" ${extra || ''}>${label}</span>`;
     let h = `<div class="card-head"><div class="portrait">${por}</div><div><div class="nm">${esc(g.name)}</div><div class="sb">${g.sex === 'm' ? 'ผู้ชาย' : 'ผู้หญิง'} · ${esc(g.race)}${g.line ? ' · ' + esc(g.line) : ''} · เกิดที่${R.name}</div></div></div>
-    <div class="chips">${g.traits.map(id => `<span class="chip t">${TRAITS.find(t => t.id === id).name}</span>`).join('')}<span class="chip">${CLS_SHORT[g.cls]}</span>${g.flags.addicted ? tip('addicted', 'พึ่งพาสารเสพติด', 'style="border-color:#e84057"') : ''}${g.flags.magicOpen ? tip('magicOpen', 'ใช้เวทอย่างเปิดเผย') : ''}${g.flags.mageMarked ? tip('mageMarked', 'ถูกนักล่าเวทจับตา', 'style="border-color:#e84057"') : ''}${g.flags.magicSealed ? tip('magicSealed', 'เวทถูกผนึกด้วยเพทริไซต์') : ''}${g.flags.mistDeep ? tip('mistDeep', 'เอนเข้าหาหมอก') : ''}${g.flags.aspect ? tip(g.flags.aspect, g.flags.aspect === 'solari' ? 'โซลารี' : 'ลูนารี') : ''}</div>`;
+    <div class="chips">${g.traits.map(id => `<span class="chip t">${TRAITS.find(t => t.id === id).name}</span>`).join('')}<span class="chip">${CLS_SHORT[g.cls]}</span>${g.flags.addicted ? tip('addicted', 'พึ่งพาสารเสพติด', 'style="border-color:#e84057"') : ''}${g.flags.magicOpen ? tip('magicOpen', 'ใช้เวทอย่างเปิดเผย') : ''}${g.flags.mageMarked ? tip('mageMarked', 'ถูกนักล่าเวทจับตา', 'style="border-color:#e84057"') : ''}${g.flags.magicSealed ? tip('magicSealed', 'เวทถูกผนึกด้วยเพทริไซต์') : ''}${g.flags.prison ? tip('prison', 'ถูกคุมขัง ' + g.flags.prison + ' ปี', 'style="border-color:#e84057"') : ''}${g.flags.mistDeep ? tip('mistDeep', 'เอนเข้าหาหมอก') : ''}${g.flags.aspect ? tip(g.flags.aspect, g.flags.aspect === 'solari' ? 'โซลารี' : 'ลูนารี') : ''}</div>`;
     STATS.forEach(([k, ic, nm, col]) => {
       const v = Math.round(g[k]);
       const hidden = k === 'magic' && g.age < 8;
