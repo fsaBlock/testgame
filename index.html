@@ -162,6 +162,9 @@ h1,h2,h3{font-family:var(--serif);color:var(--gold1);font-weight:700;letter-spac
 .card-head .sb{font-size:12.5px;color:var(--mute)}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 10px}
 .chip{font-size:11.5px;padding:2px 10px;border:1px solid rgba(200,170,110,.35);background:rgba(200,170,110,.06);color:var(--gold1);clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%)}
+.chip[title]{cursor:help}
+.chip.off{opacity:.38}
+.ach{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chip.t{border-color:rgba(10,200,185,.55);color:#8ff0e6;background:rgba(10,200,185,.08)}
 .stat{display:grid;grid-template-columns:100px 1fr 32px;gap:8px;align-items:center;margin:7px 0;font-size:13px}
 .stat .track{height:9px;background:var(--blue6);border:1px solid var(--gold5)}
@@ -295,13 +298,15 @@ h1,h2,h3{font-family:var(--serif);color:var(--gold1);font-weight:700;letter-spac
     <div class="bars" id="bars"></div>
   </div>
 
+  <div class="panel" id="metaPanel" style="margin:0 18px 18px"></div>
   <div class="grid2" style="margin:0 18px 16px">
     <div class="panel"><h2>อนุสรณ์</h2><p class="muted" style="font-size:13px;margin-bottom:8px">ชีวิตที่เคยดำเนินจนถึงที่สุดบนเครื่องนี้ จุดเทียนให้พวกเขาได้</p><div class="mem-list" id="memorial"></div></div>
     <div class="panel notice">
       <h2>เกี่ยวกับเกมนี้</h2>
       <p>แต่ละชีวิตเป็นไปอย่างสุ่ม ทางเลือกเปลี่ยนชีวิตได้ แต่ยากที่จะหลุดพ้นจากสถานะของแคว้นที่เกิดได้ทั้งหมด อายุขัย รายได้ ความปลอดภัย และโอกาสทางการศึกษาล้วนต่างกันตามถิ่นกำเนิด</p>
-      <p style="margin-top:8px">เผ่าพันธุ์ถูกสุ่มตามถิ่นเกิด มนุษย์มีแทบทุกแคว้น ยอร์เดิลเดินทางผ่านประตูแบนเดิล วาสทาย่าผูกกับเวทวิญญาณ ไอซ์บอร์นกับโทรลล์อยู่ในเฟรลยอร์ด มิโนทอร์อยู่แถบน็อกซัส หมอกดำอยู่เกาะแห่งเงา และรอยความว่างอยู่แถวชูริม่า เดมาเซียล่าผู้ใช้เวทด้วยเพทริไซต์ การฝึกเวทหรือย้ายเข้าไปจึงมีผลกับชีวิต</p>
+      <p style="margin-top:8px">เผ่าพันธุ์ถูกสุ่มตามถิ่นเกิด มนุษย์มีแทบทุกแคว้น ยอร์เดิลเดินทางผ่านประตูแบนเดิล วาสทาญ่าผูกกับเวทวิญญาณ ไอซ์บอร์นกับโทรลล์อยู่ในเฟรย์ลยอร์ด มิโนทอร์อยู่แถบน็อกซัส หมอกดำอยู่เกาะแห่งเงา และรอยความว่างอยู่แถวชูริม่า เดมาเซียล่าผู้ใช้เวทด้วยเพทริไซต์ การฝึกเวทหรือย้ายเข้าไปจึงมีผลกับชีวิต</p>
       <p style="margin-top:8px">ชีวิตจะไม่ถูกบันทึก เปิดหน้าเว็บใหม่ทุกครั้งคุณจะได้เกิดใหม่เสมอ แต่ชีวิตที่จบลงแล้วจะถูกเก็บไว้ในอนุสรณ์</p>
+      <p style="margin-top:8px">ระหว่างเล่น ให้แตะป้ายสถานะเพื่ออ่านคำอธิบาย และเปิดกฎเวทของแคว้นที่คุณอยู่ได้จากแผงตัวตน</p>
       <p style="margin-top:8px">หากรู้สึกแย่หรือกำลังคิดทำร้ายตัวเอง โปรดพูดคุยกับคนใกล้ชิด หรือโทรสายด่วนสุขภาพจิต <b>1323</b> (ประเทศไทย)</p>
       <p style="margin-top:8px">เกมแฟนเมดที่ไม่เป็นทางการ ไม่เกี่ยวข้องกับ Riot Games ชื่อและโลกของ Runeterra และ League of Legends เป็นของ Riot Games, Inc. แรงบันดาลใจด้านรูปแบบเกมจาก 1in8b.life</p>
     </div>
@@ -420,12 +425,12 @@ const REGIONS = [
    desc:'เมืองข้างล่างซึ่งอยู่ในเงาของพิลโทเวอร์ ผู้คนอยู่รอดด้วยไหวพริบและพวกพ้อง อากาศเต็มไปด้วยควันและความหวัง',
    vio:['ความรุนแรงในซอกตึก','ถูกลอบทำร้ายจากแก๊งคู่อริ'], ill:['พิษสะสมจากสารเคมี','โรคปอดจากควันพิษ','ภาวะติดเชื้อรุนแรง'],
    champs:[['Jinx','เด็กสาวผมน้ำเงินยาวหัวเราะลั่นขณะวิ่งผ่านซอย พร้อมเสียงระเบิดเล็ก ๆ ข้างหลัง'],['Vi','หญิงสาวหมัดเหล็กเดินตรวจย่านและเก็บเงินค้างจ่ายคืนจากพวกเลว']] },
- { id:'freljord', name:'เฟรลยอร์ด', icon:'❄️', color:'#8fd3ff', pos:[210,62], w:8, life:{m:57,f:62}, infant:.06, wealth:3, viol:.0014, war:.0025, medical:3, edu:2, magic:30, fert:2.6, extra:0,
+ { id:'freljord', name:'เฟรย์ลยอร์ด', icon:'❄️', color:'#8fd3ff', pos:[210,62], w:8, life:{m:57,f:62}, infant:.06, wealth:3, viol:.0014, war:.0025, medical:3, edu:2, magic:30, fert:2.6, extra:0,
    cls:[.35,.50,.10,.04,.01], mil:'fre_tribe',
-   places:['ค่ายเผ่ากลางทุ่งหิมะ','หมู่บ้านริมน้ำแข็งแห่งเฟรลยอร์ด','ป้อมหินของเผ่านักรบ','หุบเขาล่าสัตว์ทางเหนือ'],
+   places:['ค่ายเผ่ากลางทุ่งหิมะ','หมู่บ้านริมน้ำแข็งแห่งเฟรย์ลยอร์ด','ป้อมหินของเผ่านักรบ','หุบเขาล่าสัตว์ทางเหนือ'],
    fn:{m:['Bjorn','Ragnar','Ulf','Sven','Torgar','Haldor'],f:['Astrid','Freya','Ingrid','Sigrun','Thyra','Hilda']}, ln:['Ironbrow','Snowhide','Winterhelm','Stormcaller','Bearclaw','Ulfsdotter'],
    fam:{low:['นักล่าและคนหาปลาในน้ำแข็ง','คนเลี้ยงสัตว์'],mid:['ช่างตีเหล็กประจำเผ่า','หมอผีประจำค่าย'],high:['ผู้นำเผ่า','นักรบผู้มีชื่อเสียง']},
-   school:'ค่ายเผ่าที่ผู้อาวุโสสอนเรื่องเอาตัวรอด', academy:'วิหารแห่งผู้ทำนายแห่งเฟรลยอร์ด', healer:'หมอผีประจำเผ่า', army:'กองกำลังเผ่านักรบ', pet:'ลูกหมาป่าสีขาว',
+   school:'ค่ายเผ่าที่ผู้อาวุโสสอนเรื่องเอาตัวรอด', academy:'วิหารแห่งผู้ทำนายแห่งเฟรย์ลยอร์ด', healer:'หมอผีประจำเผ่า', army:'กองกำลังเผ่านักรบ', pet:'ลูกหมาป่าสีขาว',
    festival:'งานรวมเผ่ากลางฤดูหนาว กองไฟสูงขึ้นพร้อมเสียงเพลงและเนื้อย่าง',
    desc:'ดินแดนน้ำแข็งอันโหดร้ายที่ผู้คนต้องสู้ทั้งความหนาวและสงครามระหว่างเผ่า แต่มิตรภาพที่นี่แน่นแฟ้นยิ่ง',
    vio:['ศึกระหว่างเผ่า','ถูกพายุหิมะกลืนระหว่างการล่า'], ill:['ไข้หนาว','โรคปอดอักเสบ','ภาวะขาดอาหารยาวนาน'],
@@ -576,7 +581,7 @@ const TRAITS = [
 ];
 
 // ---------- peoples and magic law ----------
-const RACE_NAME = { human: 'มนุษย์', yordle: 'ยอร์เดิล', vastaya: 'วาสทาย่า', half: 'ลูกครึ่งวาสทาย่า', iceborn: 'ไอซ์บอร์น', troll: 'โทรลล์', minotaur: 'มิโนทอร์', mist: 'ผู้ถูกหมอกแตะ', voidtouched: 'ผู้ถูกความว่างแตะ' };
+const RACE_NAME = { human: 'มนุษย์', yordle: 'ยอร์เดิล', vastaya: 'วาสทาญ่า', half: 'ลูกครึ่งวาสทาญ่า', iceborn: 'ไอซ์บอร์น', troll: 'โทรลล์', minotaur: 'มิโนทอร์', mist: 'ผู้ถูกหมอกแตะ', voidtouched: 'ผู้ถูกความว่างแตะ' };
 const RACE_WEIGHT = {
   demacia: { human: 84, yordle: 6, vastaya: 2, half: 2, minotaur: 5, iceborn: 1 },
   noxus: { human: 74, minotaur: 12, vastaya: 4, half: 5, yordle: 2, troll: 1, voidtouched: 2 },
@@ -674,9 +679,9 @@ function visualAge(age, raceId) { return raceId === 'yordle' ? age * 0.62 : age;
 function raceIntro(ch) {
   const who = {
     yordle: `คุณเป็นยอร์เดิล${ch.line ? ' ' + ch.line : ''} เวทติดตัวมาตั้งแต่เกิด และคุณจะแก่ช้ากว่ามนุษย์รอบข้าง`,
-    vastaya: `คุณเป็นวาสทาย่า${ch.line ? 'เผ่า' + ch.line : ''} เวทวิญญาณของแผ่นดินหล่อเลี้ยงคุณ ห่างจากถิ่นนั้นร่างกายจะอ่อนลง`,
-    half: `คุณเป็นลูกครึ่งวาสทาย่า${ch.line ? 'สาย' + ch.line : ''} เวทในตัวเบากว่าวาสทาย่าเต็มตัว แต่สายตาก็ยังหยุดที่คุณ`,
-    iceborn: 'คุณเกิดในสายเลือดไอซ์บอร์น น้ำแข็งแท้ไม่กัดคุณแบบคนธรรมดา และพลังนี้ถูกนับเป็นเวทในแคว้นที่กลัวเวท',
+    vastaya: `คุณเป็นวาสทาญ่า${ch.line ? 'เผ่า' + ch.line : ''} เวทวิญญาณของแผ่นดินหล่อเลี้ยงคุณ ห่างจากถิ่นนั้นร่างกายจะอ่อนลง`,
+    half: `คุณเป็นลูกครึ่งวาสทาญ่า${ch.line ? 'สาย' + ch.line : ''} เวทในตัวเบากว่าวาสทาญ่าเต็มตัว แต่สายตาก็ยังหยุดที่คุณ`,
+    iceborn: 'คุณเกิดในสายเลือดไอซ์บอร์น ทรูไอซ์ไม่กัดคุณแบบคนธรรมดา และพลังนี้ถูกนับเป็นเวทในแคว้นที่กลัวเวท',
     troll: `คุณเป็น${ch.line || 'โทรลล์'} ร่างใหญ่และทนทาน แต่เมืองมนุษย์ไม่ต้อนรับคุณเท่าถิ่นเกิด`,
     minotaur: 'คุณเป็นมิโนทอร์จากเทือกเขาระหว่างน็อกซัสกับเดมาเซีย ในจักรวรรดิความแข็งแกร่งเปิดทางได้ แต่ประวัติของการถูกใช้งานยังตามมา',
     mist: 'คุณเกิดบนเกาะแห่งเงาโดยมีหมอกดำแตะมาตั้งแต่เล็ก ร่างกายยังเป็นของคุณ แต่มันไม่เคยปล่อยมือ',
@@ -713,8 +718,8 @@ function trainArcane() {
     add('magic', 2.8); add('health', -1.1);
     if (chance(.07)) { add('body', 2); add('health', -5); emit(L('สารเคมีในซอนซึมเข้าแผลเล็ก ๆ ร่างกายคุณเปลี่ยนไปนิดหนึ่ง', 'n', '🧪')); }
   } else if (loc === 'freljord') {
-    if (g.raceId === 'iceborn') { add('magic', 3.4); add('health', .5); if (chance(.1)) emit(L('น้ำแข็งแท้ฟังเสียงคุณ ความหนาวไม่กัดมือ', 'good', '❄️')); }
-    else { add('magic', 1.3); if (chance(.12)) { add('health', -8); emit(L('คุณลองแตะน้ำแข็งแท้ แต่สายเลือดคุณไม่ใช่ไอซ์บอร์น ผิวไหม้จากความหนาว', 'bad', '❄️')); } }
+    if (g.raceId === 'iceborn') { add('magic', 3.4); add('health', .5); if (chance(.1)) emit(L('ทรูไอซ์ฟังเสียงคุณ ความหนาวไม่กัดมือ', 'good', '❄️')); }
+    else { add('magic', 1.3); if (chance(.12)) { add('health', -8); emit(L('คุณลองแตะทรูไอซ์ แต่สายเลือดคุณไม่ใช่ไอซ์บอร์น ผิวไหม้จากความหนาว', 'bad', '❄️')); } }
   } else if (loc === 'bilgewater') {
     add('magic', 2.2); add('charm', .25);
   } else if (loc === 'shurima') {
@@ -781,12 +786,37 @@ function arriveLaw(id) {
   if ((g.raceId === 'vastaya' || g.raceId === 'half') && !spiritHome(g, id)) {
     add('mood', g.raceId === 'half' ? -3 : -6);
     add('health', g.raceId === 'half' ? -2 : -4);
-    emit(L('เวทวิญญาณที่หล่อเลี้ยงวาสทาย่าบางลง เมื่อคุณออกจากแผ่นดินที่ยังจำเผ่าของคุณได้', 'n', '🌿'));
+    emit(L('เวทวิญญาณที่หล่อเลี้ยงวาสทาญ่าบางลง เมื่อคุณออกจากแผ่นดินที่ยังจำเผ่าของคุณได้', 'n', '🌿'));
   }
   if (g.raceId === 'minotaur' && id === 'noxus') emit(L('ในน็อกซัส ร่างมิโนทอร์ของคุณถูกมองเป็นทั้งกำลังรบและทรัพย์สิน', 'n', '⛓️'));
   if (g.raceId === 'minotaur' && id === 'demacia') emit(L('ชายแดนเดมาเซียมองมิโนทอร์ด้วยความระแวง หลายคนจำสงครามกับน็อกซัสได้', 'n', '🦁'));
   if (g.raceId === 'voidtouched' && (id === 'shurima' || id === 'demacia')) emit(L('ผู้คนถอยห่างเมื่อเห็นรอยความว่างบนตัวคุณ', 'bad', '🌀'));
+  if (g.raceId === 'voidtouched' && id === 'shurima' && !g.done.void_shurima_fear && !g.flags.voidFearShown) g.queue.push('void_shurima_fear');
 }
+
+const CHIP_TIPS = {
+  addicted: 'ร่างกายพึ่งสารเสพติด สุขภาพและอารมณ์ลดทุกปีจนกว่าจะหาทางเลิกได้',
+  mageMarked: 'ชื่อคุณอยู่ในบัญชีนักล่าเวทของเดมาเซีย โอกาสถูกจับสูงขึ้น',
+  magicSealed: 'เพทริไซต์ผนึกเวทไว้ การฝึกศาสตร์ลึกลับแทบไม่เพิ่มพลัง',
+  magicOpen: 'คุณใช้เวทอย่างเปิดเผย แคว้นที่กลัวเวทจะจับตาคุณ',
+  solari: 'คุณเดินตามสุริยัน บนทาร์กอนชื่อเสียงและความเชื่อเพิ่มขึ้น',
+  lunari: 'คุณเดินตามจันทรา ได้เวทมากขึ้น แต่บนทาร์กอนถูกกดขี่',
+  mistDeep: 'คุณเอนเข้าหาหมอกดำ พลังเพิ่มและความตายใกล้ขึ้น',
+};
+const ARCANE_LAW = {
+  demacia: 'เดมาเซียห้ามเวท เพทริไซต์ทำให้การฝึกช้าและหดหู่ หากมีคนเห็นแสงเวท ชื่อคุณจะเข้ารายชื่อนักล่าเวท วาสทาญ่า ผู้ถูกหมอก และผู้ถูกความว่างถูกสังเกตแม้ไม่ได้ฝึก ยอร์เดิลอยู่ได้จนกว่าจะเริ่มใช้เวท',
+  noxus: 'น็อกซัสไม่ห้ามเวท ถ้าเวททำให้คุณมีประโยชน์ ทหารและวงลับอาจเรียกใช้ คุณได้ชื่อเสียงและรายได้จากงานเวทมากกว่าแคว้นที่กลัวมัน',
+  ionia: 'เวทวิญญาณเป็นส่วนของชีวิต วาสทาญ่าและลูกครึ่งที่อยู่บ้านเกิดจะได้รับการหล่อเลี้ยง ออกจากแผ่นดินที่จำเผ่าได้แล้วร่างกายจะอ่อนลง',
+  piltover: 'เวทที่นี่ไปทางเฮ็กซ์เท็ค ผู้มีสติปัญญาสูงได้เงินจากงานเล็ก ๆ ผู้ที่ยังไม่ชำนาญอาจถูกประกายไฟสาด',
+  zaun: 'เคมเทคเพิ่มพลังแลกกับสุขภาพ สารในเมืองอาจเปลี่ยนร่างกายทีละน้อย',
+  freljord: 'ทรูไอซ์ฟังเฉพาะไอซ์บอร์น คนอื่นที่ฝืนใช้จะถูกความหนาวกัด ไอซ์บอร์นในบ้านเกิดทนหนาวและฟื้นตัวดีกว่า',
+  bilgewater: 'ไม่มีกฎหมายเวทชัดเจน พลังใช้ได้ค่อนข้างอิสระ วาสทาญ่าเผ่ามารายนับทะเลนี้เป็นบ้าน',
+  shurima: 'เวทอาทิตย์ยังถูกนับถือ ผู้ถูกความว่างถูกกลัวและถูกขอให้อยู่ห่างชุมชน โทรลล์ทรายอยู่ได้ตามปกติในทะเลทราย',
+  ixtal: 'เวทธาตุเป็นศักดิ์ศรีของผู้เกิดที่นี่และของวาสทาญ่า คนนอกฝึกได้น้อยและเสียชื่อเสียง หากย้ายเข้ามาจะถูกถามว่ามาเรียนหรือมาบุกรุก',
+  targon: 'พลังที่สูงพออาจถูกสุริยันหรือจันทราเลือก โซลารีได้รับการยอมรับ ลูนารีถูกตามล่าแม้จะได้เวทมากขึ้น',
+  shadow: 'การฝึกดึงหมอกดำเข้ามา สุขภาพและอารมณ์ลดลง ผู้ถูกหมอกแตะและผู้ที่เปิดเวทแรง ๆ เสี่ยงถูกเรียกชื่อ',
+  bandle: 'ยอร์เดิลใช้เวทได้ตามธรรมชาติ คนอื่นเจอเวทที่เล่นกับความจริง ของรอบตัวอาจเปลี่ยนชั่วขณะและทำให้สับสน',
+};
 
 // ---------- focus ----------
 const FOCUS = [
@@ -804,7 +834,7 @@ const WORLD = [
  { id:'noxion', icon:'⚔️', title:'สงครามน็อกซัสรุกรานไอโอเนีย', regions:['noxus','ionia'], kind:'war', dur:[3,6], text:'กองทัพน็อกซัสยกทัพข้ามทะเลสู่ไอโอเนีย สงครามลุกลามทั้งสองฝั่ง' },
  { id:'void', icon:'🌀', title:'ช่องว่างแห่ง Void เปิดออก', regions:['shurima','freljord','ionia','noxus'], kind:'war', dur:[2,4], text:'สัตว์ประหลาดจาก Void ผุดขึ้นมาจากรอยแยก ผู้คนต้องหนีและสู้เพื่อเอาตัวรอด' },
  { id:'harrow', icon:'🌫️', title:'หมอกดำแผ่ขยาย (แฮร์โรวิง)', regions:['shadow','bilgewater','demacia'], kind:'war', dur:[1,3], text:'หมอกดำแผ่ออกจากเกาะแห่งเงา วิญญาณหลงทางรบกวนผู้คนตามชายฝั่ง' },
- { id:'frelwar', icon:'🏔️', title:'ศึกระหว่างเผ่าแห่งเฟรลยอร์ด', regions:['freljord'], kind:'war', dur:[2,5], text:'เผ่าสามเผ่าแย่งชิงอำนาจ ศึกลุกลามทั่วทุ่งน้ำแข็ง' },
+ { id:'frelwar', icon:'🏔️', title:'ศึกระหว่างเผ่าแห่งเฟรย์ลยอร์ด', regions:['freljord'], kind:'war', dur:[2,5], text:'เผ่าสามเผ่าแย่งชิงอำนาจ ศึกลุกลามทั่วทุ่งน้ำแข็ง' },
  { id:'undercity', icon:'🔥', title:'ความไม่สงบระหว่างเมืองบนและเมืองล่าง', regions:['piltover','zaun'], kind:'war', dur:[1,3], text:'ความขัดแย้งระหว่างพิลโทเวอร์และซอนปะทุเป็นการจลาจลตามท้องถนน' },
  { id:'purge', icon:'🔮', title:'การกวาดล้างผู้ใช้เวทในเดมาเซีย', regions:['demacia'], kind:'mage', dur:[2,4], text:'ราชสำนักประกาศเข้มงวดต่อผู้ใช้เวท ผู้ที่ปกปิดตัวเองต้องระวังตัวมากขึ้น' },
  { id:'drought', icon:'🏜️', title:'ภัยแล้งและความอดอยาก', regions:['shurima','targon','ixtal','freljord'], kind:'famine', dur:[2,4], text:'ฝนไม่ตกมานาน น้ำและอาหารขาดแคลน ราคาปัจจัยพื้นฐานพุ่งสูง' },
@@ -1218,12 +1248,12 @@ def('nox_mage', { min: 18, max: 50, once: true, p: g => g.loc === 'noxus' && (g.
   { t: 'ฟังกระซิบของกลุ่มลับ', run: () => { add('magic', 8); add('rep', -4); add('mood', -3); return L('คุณได้ความรู้ต้องห้าม และหนี้ที่ยังไม่รู้ว่าจะต้องใช้คืนเมื่อไร', 'n', '🌹'); } },
   { t: 'ปฏิเสธทั้งสองทาง', run: () => { add('mood', 2); return L('คุณเก็บพลังไว้เป็นของตัวเอง น็อกซัสจำคนที่ปฏิเสธอำนาจได้', 'n', '🚪'); } },
 ] }) });
-def('ice_awake', { at: 12, prio: 5, once: true, when: g => g.raceId === 'iceborn', make: g => ({ icon: '❄️', title: 'น้ำแข็งแท้ตื่นในเลือด', text: g.loc === 'freljord' ? 'พายุหิมะที่ไม่ทำให้คนในเผ่าคุณสั่น คือคำตอบว่าคุณเป็นไอซ์บอร์น' : 'แม้คุณจะไม่อยู่ในเฟรลยอร์ด ความหนาวก็ยังหลบมือคุณ นี่คือสายเลือดไอซ์บอร์น', choices: [
-  { t: 'ฝึกน้ำแข็งแท้', run: () => { g.flags.magicOpen = g.loc === 'demacia' ? 0 : 1; if (g.loc === 'demacia') { g.flags.magicHidden = 1; g.flags.mageMarked = 1; } add('magic', 8); add('health', 4); return L(g.loc === 'demacia' ? 'น้ำแข็งฟังคุณ แต่ในเดมาเซียมันคือเวท นักล่าเวทเริ่มสนใจ' : 'คุณเริ่มใช้ความหนาวเป็นส่วนหนึ่งของตัวเอง', 'major', '❄️'); } },
+def('ice_awake', { at: 12, prio: 5, once: true, when: g => g.raceId === 'iceborn', make: g => ({ icon: '❄️', title: 'ทรูไอซ์ตื่นในเลือด', text: g.loc === 'freljord' ? 'พายุหิมะที่ไม่ทำให้คนในเผ่าคุณสั่น คือคำตอบว่าคุณเป็นไอซ์บอร์น' : 'แม้คุณจะไม่อยู่ในเฟรย์ลยอร์ด ความหนาวก็ยังหลบมือคุณ นี่คือสายเลือดไอซ์บอร์น', choices: [
+  { t: 'ฝึกทรูไอซ์', run: () => { g.flags.magicOpen = g.loc === 'demacia' ? 0 : 1; if (g.loc === 'demacia') { g.flags.magicHidden = 1; g.flags.mageMarked = 1; } add('magic', 8); add('health', 4); return L(g.loc === 'demacia' ? 'ทรูไอซ์ฟังคุณ แต่ในเดมาเซียมันคือเวท นักล่าเวทเริ่มสนใจ' : 'คุณเริ่มใช้ทรูไอซ์เป็นส่วนหนึ่งของตัวเอง', 'major', '❄️'); } },
   { t: 'เก็บไว้ใช้แค่ให้รอดจากฤดูหนาว', w: 2, run: () => { g.flags.magicHidden = 1; add('magic', 3); add('health', 2); return L('คุณไม่ได้โอ้อวดสายเลือดนี้ แต่มันยังปกป้องคุณจากความหนาว', 'n', '🧊'); } },
 ] }) });
-def('trueice', { min: 16, max: 55, once: true, p: g => g.loc === 'freljord' && g.raceId !== 'iceborn' && g.magic >= 58 && g.focus === 'arcane' ? .2 : 0, make: () => ({ icon: '❄️', title: 'น้ำแข็งที่ไม่ยอมรับคุณ', text: 'น้ำแข็งแท้ของเฟรลยอร์ดตอบสนองเฉพาะไอซ์บอร์น คนทั่วไปที่ฝืนใช้จะถูกความหนาวกัด', choices: [
-  { t: 'ฝืนคว้าพลัง', run: () => { add('health', -14); add('magic', 4); return L('น้ำแข็งแท้กัดเนื้อคุณ แต่คุณก็ขโมยพลังมาได้เศษหนึ่ง', 'bad', '❄️'); } },
+def('trueice', { min: 16, max: 55, once: true, p: g => g.loc === 'freljord' && g.raceId !== 'iceborn' && g.magic >= 58 && g.focus === 'arcane' ? .2 : 0, make: () => ({ icon: '❄️', title: 'ทรูไอซ์ที่ไม่ยอมรับคุณ', text: 'ทรูไอซ์ของเฟรย์ลยอร์ดตอบสนองเฉพาะไอซ์บอร์น คนทั่วไปที่ฝืนใช้จะถูกความหนาวกัด', choices: [
+  { t: 'ฝืนคว้าพลัง', run: () => { add('health', -14); add('magic', 4); return L('ทรูไอซ์กัดเนื้อคุณ แต่คุณก็ขโมยพลังมาได้เศษหนึ่ง', 'bad', '❄️'); } },
   { t: 'ถอยกลับ', w: 2, run: () => { add('mind', 2); return L('คุณยอมรับว่าสายเลือดนี้ไม่ใช่ของคุณ', 'n', '🧊'); } },
 ] }) });
 def('aspect_gaze', { min: 16, max: 40, once: true, p: g => g.loc === 'targon' && g.magic >= 66 ? .14 : 0, make: () => ({ icon: '⛰️', title: 'ภูเขามองลงมา', text: 'บนทาร์กอน พลังที่สูงพอจะถูกสุริยันหรือจันทราเหลือบมอง โซลารีคือศรัทธาที่เมืองยอมรับ ลูนารีถูกกดมาเนิ่นนาน', choices: [
@@ -1231,7 +1261,7 @@ def('aspect_gaze', { min: 16, max: 40, once: true, p: g => g.loc === 'targon' &&
   { t: 'เดินตามจันทรา', run: () => { g.flags.aspect = 'lunari'; g.flags.magicOpen = 1; add('magic', 8); add('rep', -6); add('mood', -4); return L('จันทร์ให้พลังคุณมากกว่า แต่บนเขาแห่งนี้คุณกลายเป็นผู้ถูกตามล่า', 'major', '🌙'); } },
   { t: 'ก้มหน้าเดินผ่านไป', run: () => { add('mood', -2); return L('คุณปฏิเสธสายตาของภูเขา ชีวิตธรรมดายังเป็นของคุณ', 'n', '⛰️'); } },
 ] }) });
-def('ixtal_gate', { once: true, p: 0, when: g => g.loc === 'ixtal' && g.born !== 'ixtal', make: () => ({ icon: '🌿', title: 'ป่าที่ไม่เชิญคนนอก', text: 'อิกซ์ทัลปกครองด้วยเวทธาตุและไม่เปิดสำนักให้คนต่างถิ่น วาสทาย่าบางเผ่าอยู่ที่นี่ได้ แต่คนนอกถูกมองว่าเป็นผู้บุกรุก', choices: [
+def('ixtal_gate', { once: true, p: 0, when: g => g.loc === 'ixtal' && g.born !== 'ixtal', make: () => ({ icon: '🌿', title: 'ป่าที่ไม่เชิญคนนอก', text: 'อิกซ์ทัลปกครองด้วยเวทธาตุและไม่เปิดสำนักให้คนต่างถิ่น วาสทาญ่าบางเผ่าอยู่ที่นี่ได้ แต่คนนอกถูกมองว่าเป็นผู้บุกรุก', choices: [
   { t: 'ขอเรียนเวทธาตุ', d: 'ต้องมีพลังพอให้เขาสนใจ', dis: g.magic < 48 && 'เวทของคุณยังไม่ถึงเกณฑ์ของสำนัก', run: () => { if (chance(.45 + g.magic / 300)) { add('magic', 6); add('rep', 3); return L('สำนักยอมให้คุณเรียนบางส่วน เพราะพลังของคุณพูดแทนคำขอ', 'good', '🌿'); } add('rep', -4); return L('คำขอถูกปฏิเสธ และชื่อคุณถูกจำว่าเป็นคนนอกที่อยากรู้อยากเห็น', 'bad', '🚪'); } },
   { t: 'อยู่เงียบ ๆ ไม่แตะต้องสำนัก', w: 2, run: () => { add('mood', -3); add('rep', -1); return L('คุณใช้ชีวิตที่ชายป่าโดยไม่เรียกร้องความรู้ของอิกซ์ทัล', 'n', '🍃'); } },
   { t: 'ออกจากอิกซ์ทัล', run: () => { moveTo(g.raceId === 'vastaya' ? 'ionia' : 'piltover'); return null; } },
@@ -1246,6 +1276,29 @@ def('mist_call', { min: 14, max: 70, p: g => (g.loc === 'shadow' && (g.raceId ==
   { t: 'ต่อต้านและถอยห่าง', w: 2, run: () => { add('mood', -3); add('magic', 1); return L('คุณกันหมอกไว้ได้ในปีนี้ แต่มันยังจำคุณ', 'n', '🕯️'); } },
 ] }) });
 def('yordle_long', { min: 14, max: 50, once: true, p: g => g.raceId === 'yordle' && g.loc !== 'bandle' ? .08 : 0, run: () => { add('mood', -3); add('magic', 1); return L('ประตูแบนเดิลอยู่ไกล คุณคิดถึงเมืองที่เวทเป็นเรื่องธรรมดา ไม่ใช่เรื่องต้องซ่อน', 'n', '🌀'); } });
+def('troll_home', { at: 14, once: true, prio: 4, when: g => g.raceId === 'troll' && ((g.loc === 'freljord' && g.lineId === 'ice') || (g.loc === 'shurima' && g.lineId === 'sand')), make: () => ({ icon: '🪨', title: 'ในหมู่เผ่า', text: 'ผู้ใหญ่ในเผ่าบอกว่าเมืองมนุษย์จ่ายดี แต่ไม่เคยลืมว่าคุณตัวใหญ่กว่าประตูบ้านของพวกเขา', choices: [
+  { t: 'อยู่กับเผ่า', w: 2, run: () => { add('health', 4); add('mood', 4); add('body', 2); return L('คุณรับที่ของตัวเองในเผ่า ความหนาวหรือทรายไม่ใช่ศัตรู', 'good', '🏕️'); } },
+  { t: 'ออกไปหาทางในเมืองมนุษย์', run: () => { const id = g.lineId === 'sand' ? 'piltover' : 'noxus'; g.flags.trollExile = 1; moveTo(id); return null; } },
+] }) });
+def('troll_scorn', { min: 16, max: 60, once: true, p: g => {
+  if (g.raceId !== 'troll') return 0;
+  const home = (g.loc === 'freljord' && g.lineId === 'ice') || (g.loc === 'shurima' && g.lineId === 'sand');
+  return home ? 0 : .22;
+}, make: () => ({ icon: '🚪', title: 'ประตูที่เล็กไป', text: 'เจ้าของร้านขอให้คุณออกไป เพราะลูกค้ามนุษย์ไม่กล้าเข้าเมื่อคุณยืนอยู่หน้าประตู', choices: [
+  { t: 'ทนและถอยออกมา', w: 2, run: () => { add('mood', -5); add('rep', -2); return L('คุณถอยออกมาโดยไม่โต้ ชื่อของคุณในเมืองนี้คือตัวปัญหา', 'bad', '🚪'); } },
+  { t: 'ตอบโต้', run: () => { add('rep', -6); add('mood', -2); if (chance(.35)) { add('health', -8); return L('การผลักกันจบด้วยบาดแผล ทั้งสองฝ่ายไม่ได้สิ่งที่ต้องการ', 'bad', '💢'); } return L('คุณยืนนิ่งจนอีกฝ่ายถอยก่อน แต่เรื่องนี้จะถูกเล่าต่อ', 'n', '💢'); } },
+  { t: 'กลับถิ่นเผ่า', run: () => { g.flags.trollExile = 1; moveTo(g.lineId === 'sand' ? 'shurima' : 'freljord'); return null; } },
+] }) });
+def('void_whisper', { min: 12, max: 55, once: true, p: g => g.raceId === 'voidtouched' ? .2 : 0, make: () => ({ icon: '🌀', title: 'เสียงจากรอยแยก', text: 'ตอนกลางคืนคุณได้ยินชื่อตัวเองจากที่ที่ไม่มีปาก มันเสนอความเข้าใจแลกกับอีกนิดของตัวคุณ', choices: [
+  { t: 'ฟัง', run: () => { g.flags.magicOpen = 1; add('magic', 8); add('health', -7); add('mood', -4); return L('คุณเข้าใจบางอย่างที่ไม่มีภาษา แต่ตื่นมาด้วยเลือดกำเดา', 'major', '🌀'); } },
+  { t: 'ต่อต้าน', w: 2, run: () => { g.flags.voidResist = 1; add('mind', 3); add('mood', -2); return L('คุณกลั้นหูไว้จนรุ่งสาง เสียงยังอยู่ แต่คุณไม่ตอบ', 'good', '🕯️'); } },
+  { t: 'ขอให้คนใกล้ชิดเฝ้าคุณ', run: () => { add('mood', 2); add('magic', 1); g.friends++; return L('มีคนนั่งเฝ้าทั้งคืน เสียงเบาลงเมื่อคุณไม่ได้อยู่คนเดียว', 'n', '🤝'); } },
+] }) });
+def('void_shurima_fear', { min: 14, max: 80, once: true, p: g => (g.raceId === 'voidtouched' && g.loc === 'shurima' && !g.flags.voidFearShown) ? .45 : 0, when: g => g.raceId === 'voidtouched' && g.loc === 'shurima' && !g.flags.voidFearShown, make: () => { g.flags.voidFearShown = 1; return { icon: '🏜️', title: 'ตลาดที่ถอยห่าง', text: 'ในชูริม่า รอยความว่างบนตัวคุณทำให้พ่อค้าปิดแผงและแม่บอกให้เด็กเข้าบ้าน ความว่างที่นี่ไม่ใช่ตำนานไกลตัว', choices: [
+  { t: 'หลบชุมชน', w: 2, run: () => { add('mood', -3); add('rep', 1); return L('คุณอยู่ชายเมืองและซื้อของตอนเช้ามืด ผู้คนหายใจได้คล่องขึ้น', 'n', '🌙'); } },
+  { t: 'แสดงว่าคุณยังเป็นคน', run: () => { add('rep', -4); add('magic', 2); if (chance(.4)) { add('health', -6); return L('ฝูงชนขว้างหินก่อนจะฟังจบ คุณหนีออกจากตลาด', 'bad', '🪨'); } return L('คุณพูดช้า ๆ จนมีคนหนึ่งยอมขายน้ำให้', 'n', '💧'); } },
+  { t: 'ออกจากชูริม่า', run: () => { moveTo('piltover'); return null; } },
+] }; } });
 def('first_love', { min: 13, max: 19, once: true, p: .2, run: g => { add('mood', 7); return L('คุณมีความรักครั้งแรก หัวใจเต้นแรงเกินกว่าที่เคยรู้จัก ไม่ว่าจะลงเอยแบบไหน มันก็ทิ้งรอยไว้เสมอ', 'good', '💓'); } });
 def('mentor', { min: 12, max: 40, once: true, p: .05, run: g => { add('mind', 6); add('charm', 3); return L('ผู้อาวุโสท่านหนึ่งสังเกตเห็นความสามารถของคุณ และสอนบางสิ่งที่ติดตัวคุณไปตลอดชีวิต', 'good', '🧓'); } });
 
@@ -1381,7 +1434,6 @@ def('crime_offer', { min: 16, max: 45, p: g => .015 + RG[g.loc].viol * 12, make:
   { t: 'ปฏิเสธ', d: 'ทางที่ปลอดภัยกว่า', w: 3, run: () => { add('rep', 2); return L('คุณปฏิเสธและเดินจากไป', 'n', '✋'); } },
   { t: 'แจ้งทางการ', d: 'ได้ชื่อเสียง แต่อาจถูกแก้แค้น', run: () => { add('rep', 6); if (chance(.2)) { add('health', -14); return L('คุณแจ้งทางการ แต่ถูกตอบโต้จนบาดเจ็บ', 'bad', '🤕'); } return L('ทางการชื่นชมที่คุณแจ้งเบาะแส', 'good', '📣'); } },
 ] }) });
-def('champion', { min: 8, max: 85, p: .035, run: g => { const [n, d] = pick(RG[g.loc].champs); g.met = g.met || []; if (!g.met.includes(n)) g.met.push(n); add('mood', 5); add('rep', 1); return L(`คุณได้พบ ${n} · ${d}`, 'major', '⭐'); } });
 // ---- lore: เหตุการณ์ของตัวละครในแต่ละแคว้น (อ้างอิงเนื้อเรื่อง Universe of League of Legends) ----
 const LORE = [
  // ===== เดมาเซีย =====
@@ -1480,10 +1532,15 @@ const LORE = [
    text:'Karma ผู้เป็นจิตวิญญาณที่เกิดใหม่ของผู้นำทางศาสนาแห่งไอโอเนียมาเป็นประธานพิธีไว้อาลัยแก่ผู้ล่วงลับ โคมนับพันลอยขึ้นฟ้า',
    ch:[ { t:'ปล่อยโคมให้ผู้ที่คุณรัก', fx:{mood:8,mind:2}, msg:'โคมของคุณลอยสูงขึ้นไปและคุณรู้สึกเหมือนมีใครบางคนกำลังยิ้มอยู่ข้างบน' },
         { t:'นั่งฟังคำสอนของเธอ', fx:{mind:3,mood:5}, msg:'คำสอนของเธอเรียบง่าย แต่ทำให้ใจสงบ' } ] },
- { id:'ion_vastaya', r:'ionia', min:14, max:50, race:'วาสทาย่า', c:'Xayah และ Rakan', i:'🪶', title:'กบฏแห่งวาสทาย่า',
-   text:'Xayah และ Rakan คู่รักกบฏผู้ปกป้องชนเผ่าวาสทาย่าตามหาคนที่พร้อมจะต่อสู้เพื่อเผ่าพันธุ์ของตน พวกเขาจำคุณได้ทันทีว่าเป็นวาสทาย่า',
-   ch:[ { t:'เข้าร่วมกลุ่มของพวกเขา', p:.6, fx:{charm:6,magic:4,rep:3,mood:6}, msg:'คุณได้พบเครือข่ายพี่น้องวาสทาย่าและรู้สึกว่ามีที่ที่เป็นของตัวเองจริง ๆ', fail:{fx:{health:-8,mood:-4},msg:'ภารกิจแรกของคุณพลาด คุณหนีออกมาได้อย่างหวุดหวิด'} },
+ { id:'ion_vastaya', r:'ionia', min:14, max:50, race:'วาสทาญ่า', c:'Xayah และ Rakan', i:'🪶', title:'กบฏแห่งวาสทาญ่า',
+   text:'Xayah และ Rakan คู่รักกบฏผู้ปกป้องชนเผ่าวาสทาญ่าตามหาคนที่พร้อมจะต่อสู้เพื่อเผ่าพันธุ์ของตน พวกเขาจำคุณได้ทันทีว่าเป็นวาสทาญ่า',
+   ch:[ { t:'เข้าร่วมกลุ่มของพวกเขา', p:.6, fx:{charm:6,magic:4,rep:3,mood:6}, msg:'คุณได้พบเครือข่ายพี่น้องวาสทาญ่าและรู้สึกว่ามีที่ที่เป็นของตัวเองจริง ๆ', fail:{fx:{health:-8,mood:-4},msg:'ภารกิจแรกของคุณพลาด คุณหนีออกมาได้อย่างหวุดหวิด'} },
         { t:'ขอบคุณและปฏิเสธ', fx:{mood:-1}, msg:'คุณเลือกชีวิตสงบมากกว่าการสู้รบ' } ] },
+ { id:'ion_vastaya_half', r:'ionia', min:14, max:50, raceId:'half', c:'Xayah และ Rakan', i:'🪶', title:'เลือดครึ่งเผ่า',
+   text:'Xayah และ Rakan มองคุณนานกว่าคนอื่น พวกเขารู้ว่าคุณมีเลือดวาสทาญ่า แต่ไม่เต็มตัว งานของพวกเขาอันตรายกับคนที่โลกมนุษย์ยังนับว่าเป็นพวกเดียวกัน',
+   ch:[ { t:'ขอเดินไปกับพวกเขา', p:.4, fx:{charm:3,magic:2,rep:2,mood:4}, set:'vastayaRebel', msg:'คุณได้ที่ในกลุ่ม แต่ทุกคนรู้ว่าคุณต้องพิสูจน์มากกว่าวาสทาญ่าเต็มตัว' },
+        { t:'ช่วยส่งข่าวอย่างลับ ๆ', p:.7, fx:{rep:3,mood:3,mind:1}, set:'vastayaRebel', msg:'คุณส่งข่าวระหว่างหมู่บ้านโดยไม่ถืออาวุธ และชื่อคุณถูกจดไว้ในเครือข่าย' },
+        { t:'บอกว่าคุณไม่ใช่เผ่าของพวกเขา', fx:{mood:-2}, msg:'Rakan ยักไหล่ Xayah ไม่เถียง แต่สายตาบอกว่าเธอจำคุณได้' } ] },
  // ===== พิลโทเวอร์ =====
  { id:'pil_expo', r:'piltover', min:14, max:60, c:'Jayce', i:'🔧', title:'งานแสดงนวัตกรรมเฮ็กซ์เทค',
    text:'Jayce Talis ผู้พิทักษ์แห่งอนาคตพร้อม Viktor แสดงเครื่องมือเฮ็กซ์เทคชิ้นใหม่ที่งานเอ็กซ์โป ผู้คนส่งเสียงฮือฮา',
@@ -1545,7 +1602,7 @@ const LORE = [
    text:'Zeri เด็กสาวผู้ปล่อยสายฟ้าจากมือและเคลื่อนที่รวดเร็วราวสายฟ้าช่วยจ่ายค่าไฟให้ชุมชน และชวนให้ทุกคนช่วยกัน',
    ch:[ { t:'เข้าร่วมกับเธอช่วยย่าน', fx:{rep:5,mood:7}, msg:'คุณช่วยเธอจัดไฟทั้งถนนและเห็นรอยยิ้มของเพื่อนบ้านทั้งคืน' },
         { t:'ยืนชมเฉย ๆ', fx:{mood:2}, msg:'ไฟสว่างวาบแล้วจางไปในอากาศ' } ] },
- // ===== เฟรลยอร์ด =====
+ // ===== เฟรย์ลยอร์ด =====
  { id:'fre_ashe', r:'freljord', min:16, max:55, world:'frelwar', c:'Ashe', i:'🏹', title:'สามเผ่า สามทางเลือก',
    text:'Ashe ผู้นำเผ่า Avarosa พยายามรวมเผ่าให้เป็นหนึ่งเดียว ขณะที่ Sejuani แห่ง Winter\'s Claw ไม่ยอมอ่อนข้อ ทุกคนถูกบีบให้เลือกข้าง',
    ch:[ { t:'ร่วมกับ Avarosa ของ Ashe', d:'ต้องการร่างกายแข็งแรง', req:{body:35}, p:.75, fx:{rep:8,body:3,mood:3}, msg:'คุณยืนเคียงข้าง Ashe และมีส่วนช่วยให้เผ่ายืนหยัด', fail:{fx:{health:-10,mood:-4},msg:'การรบครั้งแรกทำให้คุณบาดเจ็บ แต่คุณยังภูมิใจที่ได้สู้'} },
@@ -1557,14 +1614,14 @@ const LORE = [
         { t:'ขอเป็นลูกมือ', d:'ต้องการสติปัญญา', req:{mind:35}, fx:{mind:4,body:3}, msg:'คุณได้เรียนรู้ความร้อนและจังหวะของโลหะ' },
         { t:'ยืนดูเขาตีเหล็ก', fx:{mood:4}, msg:'ประกายไฟและเสียงค้อนทำให้คุณลืมความเหนื่อยทั้งวัน' } ] },
  { id:'fre_anivia', r:'freljord', min:10, max:70, c:'Anivia', i:'🐦', title:'นกน้ำแข็งผู้ฟื้นคืน',
-   text:'Anivia นกฟีนิกซ์แห่งน้ำแข็งผู้ปกป้องเฟรลยอร์ดปรากฏบนท้องฟ้า ไข่น้ำแข็งใบหนึ่งตกลงใกล้กับค่ายของคุณ',
+   text:'Anivia นกฟีนิกซ์แห่งน้ำแข็งผู้ปกป้องเฟรย์ลยอร์ดปรากฏบนท้องฟ้า ไข่น้ำแข็งใบหนึ่งตกลงใกล้กับค่ายของคุณ',
    ch:[ { t:'ดูแลไข่น้ำแข็ง', fx:{mood:8,rep:3,magic:2}, msg:'คุณเก็บไข่ไว้ในที่อบอุ่นและเฝ้าดูจนมันหายไปอย่างอัศจรรย์' },
         { t:'ปล่อยให้ธรรมชาติจัดการ', fx:{mood:1}, msg:'คุณมองมันอยู่ไกล ๆ และเชื่อว่าจะมีสิ่งดูแล' } ] },
  { id:'fre_volibear', r:'freljord', min:12, max:60, c:'Volibear', i:'⛈️', title:'เสียงคำรามของสายฟ้า',
    text:'พายุฟ้าผ่าอย่างรุนแรง ตำนานเล่าว่า Volibear เทพแห่งพายุกำลังตื่น ผู้เฒ่าในค่ายเรียกทุกคนให้มารวมกันสวดบูชา',
    ch:[ { t:'ร่วมพิธีบูชาพายุ', fx:{mood:5,mind:2}, msg:'พายุสงบลงเมื่อรุ่งสาง ผู้เฒ่าบอกว่า “เขาได้ยินแล้ว”' },
         { t:'หลบอยู่ในกระโจม', fx:{mood:-1}, msg:'คุณปิดหูไว้ทั้งคืน' } ] },
- { id:'fre_braum', r:'freljord', min:10, max:70, c:'Braum', i:'🛡️', title:'หัวใจแห่งเฟรลยอร์ด',
+ { id:'fre_braum', r:'freljord', min:10, max:70, c:'Braum', i:'🛡️', title:'หัวใจแห่งเฟรย์ลยอร์ด',
    text:'Braum ชายร่างยักษ์ใจดีแวะมาที่ค่ายพร้อมเสบียงเต็มไหล่ เขายิ้มและยื่นขนมปังให้ใครก็ตามที่ผ่านมา',
    ch:[ { t:'ช่วยเขาแบกเสบียง', fx:{rep:4,body:3,mood:4}, msg:'คุณช่วยเขาแจกเสบียงให้ค่ายใกล้เคียงจนเย็น' },
         { t:'ขอร่วมโต๊ะกินข้าวกับเขา', fx:{mood:6,health:3}, msg:'ซุปร้อนและเรื่องเล่าที่เฮฮาทำให้ค่ำคืนนั้นอบอุ่นอย่างบอกไม่ถูก' } ] },
@@ -1603,7 +1660,7 @@ const LORE = [
    ch:[ { t:'ยอมแลกความทรงจำกับเงิน', fx:{gold:120,mood:-8,rep:-3}, msg:'คุณจ่ายสิ่งที่นึกไม่ออกว่าคืออะไร และได้เงินก้อนโตมาแทน' },
         { t:'ปฏิเสธและเดินออก', fx:{mood:2}, msg:'เสียงหัวเราะของเขาติดตามคุณไปจนสุดถนน' } ] },
  { id:'bil_nami', r:'bilgewater', min:12, max:50, c:'Nami', i:'🌊', title:'ผู้เรียกกระแสคลื่น',
-   text:'ระหว่างพายุ เรือประมงของคุณพลิกคว่ำ หญิงสาววาสทาย่า Nami ผู้เรียกคลื่นช่วยคุณขึ้นฝั่งอย่างปลอดภัย',
+   text:'ระหว่างพายุ เรือประมงของคุณพลิกคว่ำ หญิงสาววาสทาญ่า Nami ผู้เรียกคลื่นช่วยคุณขึ้นฝั่งอย่างปลอดภัย',
    ch:[ { t:'ขอบคุณและตอบแทนเธอ', fx:{rep:3,mood:6,health:4}, msg:'คุณมอบของตอบแทนเล็ก ๆ ให้เธอ และเธอยิ้มก่อนกลับสู่ทะเล' },
         { t:'ขอเรียนรู้เรื่องคลื่นลม', fx:{mind:4,mood:3}, msg:'เธอสอนให้คุณอ่านทะเลเหมือนอ่านหนังสือ' } ] },
  // ===== ชูริม่า =====
@@ -1731,13 +1788,26 @@ const LORE = [
    text:'Ziggs ยอร์เดิลผู้รักการระเบิดเป็นชีวิตจิตใจทดลองอุปกรณ์ใหม่ในโรงงาน เศษโลหะกระเด็นเกลื่อน',
    ch:[ { t:'ช่วยเก็บกวาดและตรวจความปลอดภัย', p:.75, fx:{rep:3,mood:4}, msg:'คุณช่วยตรวจเศษและสอนให้เขาเก็บของให้เป็นที่', fail:{fx:{health:-8,mood:-2},msg:'ระเบิดจิ๋วลูกหนึ่งตกค้าง คุณได้แผลเล็กน้อย'} },
         { t:'ถอยห่างไว้ก่อน', fx:{}, msg:'คุณเลือกมองจากที่ไกล ๆ และหัวเราะเบา ๆ' } ] },
+ { id:'shu_kiilash', r:'shurima', min:14, max:55, raceId:'vastaya', lineId:'kiilash', c:'ผู้เฒ่าคีลาช', i:'🏜️', title:'ชุมชนคีลาช',
+   text:'วาสทาญ่าเผ่าคีลาชที่อาศัยตามโอเอซิสเรียกคุณเข้าวงไฟ พวกเขาเสนอให้ฝึกเวททรายที่มนุษย์ในตลาดไม่เข้าใจ',
+   ch:[ { t:'ฝึกเวททรายกับเผ่า', fx:{magic:6,mood:4,rep:2}, set:'vastayaRebel', msg:'ทรายฟังน้ำเสียงของคุณ คุณกลับเข้าเมืองด้วยพลังที่ซ่อนได้ง่ายกว่าเดิม' },
+        { t:'อยู่เงียบ ๆ ในชุมชน', fx:{mood:5,health:2}, msg:'คุณพักกับเผ่าโดยไม่ฝึกอะไรเป็นพิเศษ ร่างกายที่อ่อนจากทะเลทรายฟื้นขึ้นเล็กน้อย' } ] },
+ { id:'bil_marai', r:'bilgewater', min:12, max:55, raceId:'vastaya', lineId:'marai', c:'นักร้องมาราย', i:'🌊', title:'ทะเลเรียกเผ่า',
+   text:'ใต้ท่าเรือมีเสียงเพลงที่คนอื่นไม่ได้ยิน วาสทาญ่าเผ่ามารายกำลังเรียกให้คุณกลับลงน้ำสักพัก แม้ชีวิตบนบกจะยังไม่จบ',
+   ch:[ { t:'ลงน้ำไปกับพวกพ้อง', fx:{magic:5,health:3,mood:5}, set:'vastayaRebel', msg:'คุณอยู่ใต้น้ำจนพระจันทร์ขึ้น เวทวิญญาณของทะเลเติมสิ่งที่เมืองท่าดึงออกไป' },
+        { t:'อยู่บนบก', fx:{mood:-2}, msg:'คุณปิดหูและเดินกลับโรงเตี๊ยม เสียงเพลงยังตามมาอีกสองคืน' } ] },
+ { id:'ixt_oovi', r:'ixtal', min:14, max:55, raceId:'vastaya', lineId:'oovi', c:'ผู้พิทักษ์อูวี-แคต', i:'🐆', title:'ป่าของเผ่า',
+   text:'ในป่าอูวี-แคต วาสทาญ่าเผ่าเดียวกับคุณหยุดคุณไว้ พวกเขาถามว่าคุณจะปกป้องทางเข้าป่า หรือจะพาคนนอกเข้ามา',
+   ch:[ { t:'รับหน้าที่เฝ้าทาง', fx:{rep:4,body:3,magic:2}, set:'vastayaRebel', msg:'คุณได้ชื่อในหมู่ผู้พิทักษ์ป่า คนนอกที่หลงเข้ามาถูกพากลับอย่างสุภาพ' },
+        { t:'บอกว่าคุณแค่ผ่านทาง', fx:{mood:-1}, msg:'พวกเขาปล่อยคุณไป แต่จำกลิ่นของคุณไว้' } ] },
  { id:'ban_gnar', r:'bandle', min:6, max:30, c:'Gnar', i:'🦕', title:'ลิงก์ที่หายไป',
    text:'สิ่งมีชีวิตตัวเล็กที่ดูเหมือนยอร์เดิลยุคโบราณ Gnar โผล่ขึ้นมาจากพุ่มไม้พร้อมเสียงร้อง “กนาร์!” ท่าทางหิวโหย',
    ch:[ { t:'ให้ขนมและอาหารกับเขา', fx:{mood:6,friends:1}, msg:'เขากินจนอิ่มและเดินตามคุณไปทั่วจนเย็น' },
         { t:'ปล่อยให้เขาไป', fx:{}, msg:'เขามองคุณอยู่พักหนึ่ง แล้วหายเข้าพุ่มไม้' } ] },
 ];
 const loreOk = (g, e) => e.r === g.loc && g.age >= e.min && g.age <= e.max && !(g.flags.lore && g.flags.lore[e.id])
-  && (!e.world || g.activeWorld.some(a => a.id === e.world && a.until >= g.age)) && (!e.mag || g.magic >= e.mag) && (!e.race || g.race === e.race);
+  && (!e.world || g.activeWorld.some(a => a.id === e.world && a.until >= g.age)) && (!e.mag || g.magic >= e.mag) && (!e.race || g.race === e.race)
+  && (!e.raceId || g.raceId === e.raceId) && (!e.lineId || g.lineId === e.lineId);
 function applyFx(fx) { for (const k in fx) { if (k === 'gold') g.gold += fx[k]; else if (k === 'friends') g.friends += fx[k]; else add(k, fx[k]); } }
 function loreRun(e, h) {
   if (h.cost) g.gold -= h.cost;
@@ -1754,7 +1824,7 @@ function loreRun(e, h) {
 }
 def('lore', { min: 6, max: 100, prio: 2,
   when: g => LORE.some(e => loreOk(g, e)),
-  p: g => { const el = LORE.filter(e => loreOk(g, e)); return !el.length ? 0 : el.some(e => e.world) ? .5 : .1; },
+  p: g => { const el = LORE.filter(e => loreOk(g, e)); if (!el.length) return 0; const world = el.some(e => e.world); let p = world ? .5 : .1; if (!world && g.age >= 8 && (g.met || []).length < 3) p = Math.min(.15, p + .05); return p; },
   ctx: g => { const e = wpick(LORE.filter(x => loreOk(g, x)), x => x.world ? 5 : 1); (g.flags.lore = g.flags.lore || {})[e.id] = 1; g.met = g.met || []; if (!g.met.includes(e.c)) g.met.push(e.c); return { id: e.id }; },
   make: (g, c) => { const e = LORE.find(x => x.id === c.id); return { icon: e.i, title: e.title, text: `${e.c} · ${RG[e.r].name}\n\n${e.text}`, choices: e.ch.map(h => {
     const need = h.req ? { req: h.req } : null;
@@ -1785,6 +1855,9 @@ function titles() {
   if (g.flags.veteran) t.push('ผู้ผ่านสงคราม'); if (g.magic >= 75 && g.flags.magicOpen) t.push('ผู้ใช้เวทผู้ทรงพลัง');
   if (g.flags.mageMarked) t.push('ชื่อในบัญชีนักล่าเวท');
   if (g.flags.aspect === 'solari') t.push('ผู้เดินตามสุริยัน'); if (g.flags.aspect === 'lunari') t.push('ผู้เดินตามจันทรา');
+  if (g.flags.vastayaRebel) t.push('ผู้ยืนข้างวาสทาญ่า');
+  if (g.flags.voidResist) t.push('ผู้ปิดหูจากความว่าง');
+  if (g.flags.trollExile) t.push('โทรลล์ที่ถูกขับจากเมือง');
   if (g.history.length >= 4) t.push('คนหลายอาชีพ'); if (g.spouseYears >= 40) t.push('คู่ชีวิตตลอดกาล');
   if (g.edu >= 4) t.push('ผู้รู้ระดับสูง'); if (g.friends >= 6) t.push('คนที่มีเพื่อนมากมาย');
   return t;
@@ -1800,6 +1873,9 @@ function story() {
   if (g.grandkids) p.push(`ได้อยู่ทันเห็นหน้าหลาน ${g.grandkids} คน`);
   if (g.places.length > 1) p.push(`ย้ายไปใช้ชีวิตที่${g.places.slice(1).map(x => RG[x].name).join(' และ')}`);
   if (g.flags.veteran) p.push('เคยผ่านสมรภูมิสงคราม');
+  if (g.flags.vastayaRebel) p.push('เคยยืนข้างเครือข่ายวาสทาญ่า');
+  if (g.flags.voidResist) p.push('ต่อต้านเสียงจากรอยแยกของความว่าง');
+  if (g.flags.trollExile) p.push('ถูกขับหรือเลือกออกจากเมืองมนุษย์เพราะร่างโทรลล์');
   if (g.met && g.met.length) p.push(`ได้พบกับ ${g.met.slice(0, 4).join(', ')}${g.met.length > 4 ? ' และอีก ' + (g.met.length - 4) + ' คน' : ''}`);
   if (g.legacy) p.push(g.legacy);
   p.push(`จากไปด้วย${g.deathCause}เมื่ออายุ ${g.deathAge} ปี`);
@@ -1809,6 +1885,58 @@ function saveMemorial() {
   const m = memorials();
   m.unshift({ name: g.name, region: g.born, age: g.deathAge, cause: g.deathCause, story: story(), candles: 0, ts: Date.now() });
   setMemorials(m);
+  recordMeta(g);
+}
+
+const META_KEY = 'runeterra.meta.v1';
+function emptyMeta() {
+  return { lives: 0, maxAge: 0, totalCandles: 0, births: {}, deaths: {}, champsMet: 0, achievements: {} };
+}
+function loadMeta() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(META_KEY));
+    if (!raw || typeof raw !== 'object') return emptyMeta();
+    return Object.assign(emptyMeta(), raw, { births: raw.births || {}, deaths: raw.deaths || {}, achievements: raw.achievements || {} });
+  } catch (e) { return emptyMeta(); }
+}
+function saveMeta(meta) { try { localStorage.setItem(META_KEY, JSON.stringify(meta)); } catch (e) { /* ignore */ } }
+function deathBucket(cause) {
+  const c = cause || '';
+  if (c.includes('นักล่าเวท') || c.includes('เพทริไซต์')) return 'magehunt';
+  if (c.includes('สงคราม') || c.includes('สมรภูมิ') || c.includes('ศึก')) return 'war';
+  if (c.includes('หมอก')) return 'mist';
+  return 'other';
+}
+const ACHIEVEMENTS = [
+  { id: 'long_life', name: 'อายุยืน', desc: 'มีชีวิตถึง 80 ปี', test: ch => ch.deathAge >= 80 },
+  { id: 'yordle_home', name: 'ชาวนครแบนเดิล', desc: 'เกิดเป็นยอร์เดิลในแบนเดิลซิตี้', test: ch => ch.raceId === 'yordle' && ch.born === 'bandle' },
+  { id: 'ice_end', name: 'ทรูไอซ์', desc: 'จากไปในเฟรย์ลยอร์ดในฐานะไอซ์บอร์น', test: ch => ch.raceId === 'iceborn' && ch.loc === 'freljord' },
+  { id: 'solari', name: 'ผู้เดินตามสุริยัน', desc: 'ถูกสุริยันเลือกบนทาร์กอน', test: ch => ch.flags.aspect === 'solari' },
+  { id: 'lunari', name: 'ผู้เดินตามจันทรา', desc: 'ถูกจันทราเลือกบนทาร์กอน', test: ch => ch.flags.aspect === 'lunari' },
+  { id: 'legacy', name: 'สิ่งที่ทิ้งไว้', desc: 'ตัดสินใจเรื่องมรดกก่อนจากไป', test: ch => !!ch.legacy },
+  { id: 'dem_survivor', name: 'รอดนักล่าเวท', desc: 'อยู่เดมาเซียถึง 50 ปีทั้งที่ถูกมองว่ามีเวท', test: ch => ch.deathAge >= 50 && ch.loc === 'demacia' && noticedInDemacia(ch) },
+  { id: 'champions', name: 'ผู้พบตำนาน', desc: 'พบตัวละครแห่ง Runeterra อย่างน้อย 8 คนในชีวิตเดียว', test: ch => (ch.met || []).length >= 8 },
+  { id: 'sealed_lived', name: 'เวทถูกผนึกแล้วยังอยู่', desc: 'ถูกผนึกด้วยเพทริไซต์และมีชีวิตถึง 40 ปี', test: ch => ch.flags.magicSealed && ch.deathAge >= 40 },
+  { id: 'vastaya_rebel', name: 'เลือดวาสทาญ่า', desc: 'เข้าร่วมหรือช่วยเครือข่ายวาสทาญ่า', test: ch => !!ch.flags.vastayaRebel },
+  { id: 'void_resist', name: 'ปิดหูจากความว่าง', desc: 'ต่อต้านเสียงจากรอยแยก', test: ch => !!ch.flags.voidResist },
+  { id: 'troll_exile', name: 'โทรลล์นอกถิ่น', desc: 'ถูกขับหรือเลือกออกจากเมืองมนุษย์', test: ch => !!ch.flags.trollExile },
+  { id: 'traveler', name: 'หลายแคว้น', desc: 'เคยอาศัยอย่างน้อย 4 แคว้น', test: ch => (ch.places || []).length >= 4 },
+  { id: 'family', name: 'บ้านใหญ่', desc: 'มีลูกอย่างน้อย 3 คน', test: ch => (ch.kids || []).length >= 3 },
+];
+function recordMeta(ch) {
+  const meta = loadMeta();
+  meta.lives = (meta.lives || 0) + 1;
+  meta.maxAge = Math.max(meta.maxAge || 0, ch.deathAge || 0);
+  meta.births[ch.born] = (meta.births[ch.born] || 0) + 1;
+  const bucket = deathBucket(ch.deathCause);
+  meta.deaths[bucket] = (meta.deaths[bucket] || 0) + 1;
+  meta.champsMet = Math.max(meta.champsMet || 0, (ch.met || []).length);
+  const fresh = [];
+  ACHIEVEMENTS.forEach(a => {
+    if (!meta.achievements[a.id] && a.test(ch)) { meta.achievements[a.id] = true; fresh.push(a.id); }
+  });
+  saveMeta(meta);
+  ch.newAchievements = fresh;
 }
 
 // =====================================================================
@@ -1867,7 +1995,7 @@ function portraitSVG(sex, age, region, name, race) {
   const faceW = 0.94 + rnd() * 0.12;
   const yordle = race === 'ยอร์เดิล';
   const half = !!(race && race.includes('ลูกครึ่ง'));
-  const vastaya = race === 'วาสทาย่า' || half;
+  const vastaya = race === 'วาสทาญ่า' || half;
   const minotaur = !!(race && race.includes('มิโนทอร์'));
   const troll = !!(race && race.includes('โทรลล์'));
   const iceborn = !!(race && race.includes('ไอซ์บอร์น'));
@@ -2067,8 +2195,9 @@ const UI = (() => {
     const R = RG[g.born], loc = RG[g.loc];
     const por = portraitSVG(g.sex, visualAge(g.age, g.raceId), g.born, g.name, g.race);
     const job = g.job ? `${CA[g.job].name} · ${RANK[g.rank]}` : isRetired() ? 'เกษียณแล้ว' : g.age < 15 ? 'วัยเรียน' : 'ไม่มีงานประจำ';
+    const tip = (key, label, extra) => `<span class="chip" title="${esc(CHIP_TIPS[key] || '')}" ${extra || ''}>${label}</span>`;
     let h = `<div class="card-head"><div class="portrait">${por}</div><div><div class="nm">${esc(g.name)}</div><div class="sb">${g.sex === 'm' ? 'ผู้ชาย' : 'ผู้หญิง'} · ${esc(g.race)}${g.line ? ' · ' + esc(g.line) : ''} · เกิดที่${R.name}</div></div></div>
-    <div class="chips">${g.traits.map(id => `<span class="chip t">${TRAITS.find(t => t.id === id).name}</span>`).join('')}<span class="chip">${CLS_SHORT[g.cls]}</span>${g.flags.addicted ? '<span class="chip" style="border-color:#e84057">พึ่งพาสารเสพติด</span>' : ''}${g.flags.mageMarked ? '<span class="chip" style="border-color:#e84057">ถูกนักล่าเวทจับตา</span>' : ''}${g.flags.magicSealed ? '<span class="chip">เวทถูกผนึกด้วยเพทริไซต์</span>' : ''}${g.flags.aspect ? `<span class="chip t">${g.flags.aspect === 'solari' ? 'โซลารี' : 'ลูนารี'}</span>` : ''}</div>`;
+    <div class="chips">${g.traits.map(id => `<span class="chip t">${TRAITS.find(t => t.id === id).name}</span>`).join('')}<span class="chip">${CLS_SHORT[g.cls]}</span>${g.flags.addicted ? tip('addicted', 'พึ่งพาสารเสพติด', 'style="border-color:#e84057"') : ''}${g.flags.magicOpen ? tip('magicOpen', 'ใช้เวทอย่างเปิดเผย') : ''}${g.flags.mageMarked ? tip('mageMarked', 'ถูกนักล่าเวทจับตา', 'style="border-color:#e84057"') : ''}${g.flags.magicSealed ? tip('magicSealed', 'เวทถูกผนึกด้วยเพทริไซต์') : ''}${g.flags.mistDeep ? tip('mistDeep', 'เอนเข้าหาหมอก') : ''}${g.flags.aspect ? tip(g.flags.aspect, g.flags.aspect === 'solari' ? 'โซลารี' : 'ลูนารี') : ''}</div>`;
     STATS.forEach(([k, ic, nm, col]) => {
       const v = Math.round(g[k]);
       const hidden = k === 'magic' && g.age < 8;
@@ -2080,7 +2209,8 @@ const UI = (() => {
       <span>ทอง</span><span>${Math.round(g.gold)} 🪙 (${statusLabel()})</span>
       <span>อาชีพ</span><span>${esc(job)}</span>
       <span>การศึกษา</span><span>${EDU[g.edu]}</span>
-      <span>อาศัยอยู่ที่</span><span>${loc.icon} ${loc.name}</span></div>`;
+      <span>อาศัยอยู่ที่</span><span>${loc.icon} ${loc.name}</span></div>
+      <button type="button" class="btn" id="btnLaw" style="margin-top:8px">กฎเวทและเผ่าในแคว้นนี้</button>`;
     h += `<div class="sec">ครอบครัวและผู้คน</div><div class="kvl">
       <span>บิดา</span><span>${g.parents.f.alive ? 'มีชีวิตอยู่' : 'จากไปแล้ว'}</span>
       <span>มารดา</span><span>${g.parents.m.alive ? 'มีชีวิตอยู่' : 'จากไปแล้ว'}</span>
@@ -2117,6 +2247,15 @@ const UI = (() => {
   function renderLog() { $('#log').innerHTML = g.log.slice().reverse().map(entryHTML).join(''); }
 
   // ----- modal -----
+  function openLaw() {
+    if (!g || g.pending) return;
+    const was = g.running; g.running = false; renderTop();
+    const loc = RG[g.loc];
+    $('#dlg').innerHTML = `<div class="ic">${loc.icon}</div><h2>กฎเวทใน${esc(loc.name)}</h2><div class="tx">${esc(ARCANE_LAW[g.loc] || '')}\n\n${esc(raceIntro(g))}</div>
+      <div class="choices"><button class="choice" id="lawClose"><span class="k">1</span><span><b>ปิด</b></span></button></div>`;
+    $('#modal').hidden = false;
+    $('#lawClose').onclick = () => { $('#modal').hidden = true; g.running = was; renderTop(); };
+  }
   function closeModal() { $('#modal').hidden = true; clearTimeout(modalAuto); document.removeEventListener('keydown', modalKeys); }
   function modalKeys(ev) { const n = +ev.key; if (n >= 1 && n <= 9) { const b = $$('#dlg .choice:not(:disabled)')[n - 1]; if (b) b.click(); } }
   function openDecision() {
@@ -2157,6 +2296,11 @@ const UI = (() => {
     $('#bars').innerHTML = REGIONS.slice().sort((a, b) => b.w - a.w).map(r => `<div class="bar"><span>${r.icon} ${r.name}</span><div class="track"><div class="fill" style="width:${(r.w / 16) * 100}%;background:${r.color};color:${r.color}"></div></div><span class="pct">${(r.w / TOTAL_W * 100).toFixed(1)}%</span></div>`).join('');
     const m = memorials();
     $('#memorial').innerHTML = m.length ? m.slice(0, 6).map((x, i) => `<div class="mem"><span class="ic">${RG[x.region].icon}</span><div><div class="nm">${esc(x.name)} · อายุ ${x.age} ปี</div><div class="sm">${esc(x.story)}</div></div><button class="btn candle" data-i="${i}">🕯️ ${x.candles || 0}</button></div>`).join('') : '<p class="muted" style="font-size:13px">ยังไม่มีใครในอนุสรณ์ ชีวิตแรกของคุณอาจเป็นคนแรก</p>';
+    const meta = loadMeta();
+    const ach = ACHIEVEMENTS.map(a => `<span class="chip ${meta.achievements[a.id] ? 't' : 'off'}" title="${esc(a.desc)}">${esc(a.name)}</span>`).join('');
+    $('#metaPanel').innerHTML = `<h2>สถิติการเดินทาง</h2><p class="muted" style="font-size:13px;margin-bottom:8px">นับจากชีวิตที่จบลงบนเครื่องนี้</p>
+      <div class="sumgrid"><div><b>${meta.lives || 0}</b><span>ชีวิต</span></div><div><b>${meta.maxAge || 0}</b><span>อายุสูงสุด</span></div><div><b>${meta.champsMet || 0}</b><span>แชมป์สูงสุดในชีวิตเดียว</span></div><div><b>${meta.totalCandles || 0}</b><span>เทียนที่จุด</span></div></div>
+      <div class="ach">${ach}</div>`;
   }
 
   function birthSequence(life) {
@@ -2183,6 +2327,7 @@ const UI = (() => {
 
   function start(life) {
     g = life; prevStats = {};
+    $('#log').innerHTML = '';
     g.running = true;
     applyAccent(); show('game');
     const R = RG[g.born];
@@ -2319,7 +2464,8 @@ const UI = (() => {
   function showEnd() {
     closeModal(); show('end');
     const R = RG[g.born], exp = R.life[g.sex], diff = g.deathAge - exp, tt = titles();
-    const quotes = g.notes.map(n => `<div class="quote">อายุ ${n.a} ปี · “${esc(n.t)}”</div>`).join('');
+    const quotes = (g.notes && g.notes.length) ? g.notes.map(n => `<div class="quote">อายุ ${n.a} ปี · “${esc(n.t)}”</div>`).join('') : '';
+    const achLine = (g.newAchievements || []).length ? `<p style="text-align:center;margin-top:8px">ความสำเร็จใหม่: ${(g.newAchievements).map(id => { const a = ACHIEVEMENTS.find(x => x.id === id); return `<span class="chip t" title="${esc(a.desc)}">${esc(a.name)}</span>`; }).join(' ')}</p>` : '';
     const majors = g.log.filter(e => e.k === 'major' && e.t.length < 400), pickN = 10;
     const tl = (majors.length > pickN ? Array.from({ length: pickN }, (_, i) => majors[Math.round(i * (majors.length - 1) / (pickN - 1))]) : majors)
       .map(e => `<div class="tl"><b>${e.a}</b><span>${e.i} ${esc(e.t)}</span></div>`).join('');
@@ -2331,7 +2477,7 @@ const UI = (() => {
             <p class="muted" style="margin-top:10px;font-size:14px">${diff >= 0 ? `ชีวิตของคุณยืนยาวกว่าอายุขัยเฉลี่ยของ${R.name} ${diff} ปี` : `ชีวิตของคุณสั้นกว่าอายุขัยเฉลี่ยของ${R.name} ${-diff} ปี`}</p></div>
           <div class="panel"><h2>สรุปตัวเลข</h2>
             <div class="sumgrid"><div><b>${g.deathAge}</b><span>อายุ (ปี)</span></div><div><b>${Math.round(g.gold)}</b><span>ทองสุดท้าย</span></div><div><b>${g.kids.length}</b><span>ลูก</span></div><div><b>${g.grandkids}</b><span>หลาน</span></div><div><b>${g.places.length}</b><span>แคว้นที่เคยอยู่</span></div><div><b>${Math.round(g.rep)}</b><span>ชื่อเสียง</span></div></div>
-            ${tt.length ? `<p style="text-align:center">${tt.map(x => `<span class="chip t">${x}</span>`).join(' ')}</p>` : ''}
+            ${tt.length ? `<p style="text-align:center">${tt.map(x => `<span class="chip t">${x}</span>`).join(' ')}</p>` : ''}${achLine}
             ${g.met && g.met.length ? `<p class="muted" style="text-align:center;font-size:13px;margin-top:8px">ตัวละครแห่ง Runeterra ที่คุณเคยพบ: ${g.met.map(esc).join(' · ')}</p>` : ''}</div>
           <div class="panel"><h2>จุดเปลี่ยนของชีวิต</h2><div class="tls">${tl}</div></div>
         </div></div>
@@ -2350,7 +2496,8 @@ const UI = (() => {
     $$('#lenOpts .opt').forEach(o => o.onclick = () => { $$('#lenOpts .opt').forEach(x => x.classList.remove('on')); o.classList.add('on'); spy = +o.dataset.spy; });
     $('#ageOk').onchange = e => $('#btnBorn').disabled = !e.target.checked;
     $('#btnBorn').onclick = () => birthSequence(newLife(spy));
-    $('#memorial').addEventListener('click', e => { const b = e.target.closest('.candle'); if (!b) return; const m = memorials(); m[+b.dataset.i].candles = (m[+b.dataset.i].candles || 0) + 1; setMemorials(m); renderIntro(); });
+    $('#memorial').addEventListener('click', e => { const b = e.target.closest('.candle'); if (!b) return; const m = memorials(); m[+b.dataset.i].candles = (m[+b.dataset.i].candles || 0) + 1; setMemorials(m); const meta = loadMeta(); meta.totalCandles = (meta.totalCandles || 0) + 1; saveMeta(meta); renderIntro(); });
+    $('#colMe').addEventListener('click', e => { if (e.target.closest('#btnLaw')) openLaw(); });
     $('#bPlay').onclick = () => { g.running = !g.running; renderTop(); };
     $('#ctrlSpeed').addEventListener('click', e => { const b = e.target.closest('[data-sp]'); if (b) { g.speed = +b.dataset.sp; renderTop(); } });
     $('#bAuto').onclick = () => { g.auto = !g.auto; if (g.auto) { autoFocus(); renderFocus(); if (g.pending) openDecision(); } renderTop(); toast(g.auto ? 'เปิดโหมดอัตโนมัติ' : 'ปิดโหมดอัตโนมัติ'); };
