@@ -2,7 +2,7 @@
 
 เกมจำลองชีวิตแฟนเมดบนทวีป Runeterra ทั้งเกมอยู่ในไฟล์เดียวคือ [`index.html`](index.html) เปิดในเบราว์เซอร์ได้ทันที ไม่ต้องติดตั้งอะไรเพิ่ม
 
-เล่นออนไลน์ได้ที่ [wjunthamas-maker.github.io/testgame](https://wjunthamas-maker.github.io/testgame/)
+เล่นออนไลน์ได้ที่ [fsablock.github.io/testgame](https://fsablock.github.io/testgame/)
 
 ## วิธีเล่น
 
